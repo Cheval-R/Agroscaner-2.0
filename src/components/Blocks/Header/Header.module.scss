@@ -1,0 +1,82 @@
+$gap-size: 10px;
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: $gap-size;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $gap-size;
+  // flex-wrap: wrap;
+
+  @media (max-width: 650px) {
+    display: grid;
+    justify-content: space-between;
+
+
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "tahsLogo labLogo"
+      "headerTitle headerTitle";
+
+    gap: $gap-size;
+  }
+}
+
+.tahsLogo {
+  grid-area: tahsLogo;
+  justify-self: center;
+}
+
+.labLogo {
+  grid-area: labLogo;
+  justify-self: center;
+}
+
+.headerTitle {
+  justify-self: center;
+  grid-area: headerTitle;
+
+  text-align: center;
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 500;
+  color: #25252d;
+
+  @media (max-width: 650px) {
+    font-size: clamp(14px, 4.5vw, 28px);
+  }
+}
+
+
+.navList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $gap-size;
+
+  text-align: center;
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+  }
+}
+
+.navItem {
+  font-size: 18px;
+
+  @media (max-width: 650px) {
+    font-size: clamp(10px, 2vw, 14px);
+  }
+
+  @media (max-width: 450px) {
+    width: 90%;
+
+    &>* {
+      width: 100%;
+    }
+  }
+}
