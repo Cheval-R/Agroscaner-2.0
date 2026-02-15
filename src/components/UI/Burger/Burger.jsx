@@ -1,18 +1,12 @@
-import { act, useState } from "react";
+import { useState } from "react";
 import styles from "./Burger.module.scss";
-import Header from "../../Blocks/Header/Header";
+import Header from "../../Header/Header";
 import Capsule from "../Capsule/Capsule";
 
-const Burger = ({
-  isTightDisplay,
-  programList,
-  activeProgram,
-  changeActiveProgram,
-  changeActiveClient,
-}) => {
+const Burger = ({ isMobileDisplay }) => {
   const [isBurgerOpen, setIsBurgerOpen] = useState(false);
   const burgerToggleHandler = () => {
-    setIsBurgerOpen(!isBurgerOpen);
+    setIsBurgerOpen((prev) => !prev);
   };
   return (
     <div className={styles.burgerWrapper}>
@@ -25,12 +19,8 @@ const Burger = ({
         ></span>
       </Capsule.Button>
       <Header.HeaderNav
-        isTightDisplay={isTightDisplay}
+        isMobileDisplay={isMobileDisplay}
         isBurgerOpen={isBurgerOpen}
-        activeProgram={activeProgram}
-        programList={programList}
-        changeActiveProgram={changeActiveProgram}
-        changeActiveClient={changeActiveClient}
       />
     </div>
   );

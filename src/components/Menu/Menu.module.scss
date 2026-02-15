@@ -1,5 +1,10 @@
 .menu {
   position: relative;
+
+}
+
+.dropdownButton {
+  width: 100%;
 }
 
 
@@ -18,11 +23,6 @@
 
   min-width: 200px;
   padding: 1lh;
-
-  @media (max-width: 450px) {
-
-    left: 7%;
-  }
 }
 
 .menuItem {

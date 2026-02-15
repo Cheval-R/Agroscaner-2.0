@@ -1,6 +1,10 @@
 $gap-size: 10px;
 
-.content {
+.header {
+  padding: 15px;
+}
+
+.headerContent {
   display: flex;
   flex-direction: column;
   gap: $gap-size;

@@ -28,6 +28,7 @@ const Button = ({
     <button
       className={`${styles.capsule} ${isBox ? styles.capsuleBox : ""} ${isActive ? styles.capsuleActive : ""} ${className}`}
       onClick={onClickHandler}
+      type="button"
     >
       {children}
     </button>

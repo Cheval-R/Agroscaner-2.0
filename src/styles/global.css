@@ -5,8 +5,7 @@
 }
 
 body {
-  padding: 20px 0;
-
+  /* padding: 20px 0; */
   position: relative;
   overflow-x: hidden;
   min-width: 320px;
