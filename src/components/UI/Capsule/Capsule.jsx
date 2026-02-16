@@ -6,6 +6,7 @@ const Capsule = ({
   tag = "div",
   isBox = false,
   isActive = false,
+  ß,
 }) => {
   const Tag = tag;
   return (
@@ -51,7 +52,18 @@ const Link = ({
   );
 };
 
+const Input = ({ type, id }) => {
+  return (
+    <input
+      className={styles.capsule}
+      type={type}
+      id={id}
+    />
+  );
+};
+
 Capsule.Button = Button;
 Capsule.Link = Link;
+Capsule.Input = Input;
 
 export default Capsule;

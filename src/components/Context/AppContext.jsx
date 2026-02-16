@@ -1,10 +1,16 @@
 import { createContext, useContext, useState } from "react";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 const AppContext = createContext(null);
 
 export const AppProvider = ({ children }) => {
+  const isMobileDisplay = useMediaQuery(450);
+
   const [activeSelection, setActiveSelection] = useState({
-    program: { key: "mineral-fertilizer-calculator", label: "Mineral" },
+    program: {
+      key: "mineral-fertilizer-calculator",
+      label: "Расчёт минеральных удобрений",
+    },
     client: { key: null, label: null },
   });
 
@@ -37,6 +43,7 @@ export const AppProvider = ({ children }) => {
     activeSelection,
     changeActiveClient,
     changeActiveProgram,
+    isMobileDisplay,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

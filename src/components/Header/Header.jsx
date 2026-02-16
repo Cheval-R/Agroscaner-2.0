@@ -10,8 +10,7 @@ import { useMediaQuery } from "../../hooks/useMediaQuery";
 import PROGRAM_LIST from "../../data/programList";
 
 const Header = () => {
-  const { activeSelection } = useProgramContext();
-  const isMobileDisplay = useMediaQuery(450);
+  const { activeSelection, isMobileDisplay } = useProgramContext();
   return (
     <header className={`${styles.header} container`}>
       <div className={styles.headerContent}>
@@ -55,14 +54,11 @@ const HeaderTop = ({ calculatorLabel }) => {
 };
 
 const HeaderContent = ({ isMobileDisplay }) => {
-  return isMobileDisplay ? (
-    <Burger isMobileDisplay={isMobileDisplay} />
-  ) : (
-    <HeaderNav isMobileDisplay={isMobileDisplay} />
-  );
+  return isMobileDisplay ? <Burger /> : <HeaderNav />;
 };
 
-const HeaderNav = ({ isMobileDisplay, isBurgerOpen }) => {
+const HeaderNav = ({ isBurgerOpen }) => {
+  const { isMobileDisplay } = useProgramContext();
   return (
     <nav
       className={`${isMobileDisplay ? burgerStyles.burgerNav : ""} ${isBurgerOpen ? burgerStyles.burgerNavOpen : ""}`}
@@ -87,7 +83,7 @@ const NavItem = ({ item }) => {
   return (
     <li className={styles.navItem}>
       {item?.innerList ? (
-        <Menu programData={item} />
+        <Menu dropDownList={item} />
       ) : (
         <Capsule.Button
           isActive={item.key === activeSelection.program.key}

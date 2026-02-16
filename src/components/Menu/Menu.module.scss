@@ -16,13 +16,18 @@
   width: max-content;
 
   overflow: hidden;
-  clip-path: inset(0 0 100% 0);
+  max-height: 0;
+  padding: 0;
   opacity: 0;
+  transform: translateY(-6px);
   pointer-events: none;
-  transition: clip-path 0.25s ease, opacity 0.2s ease;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.2s ease,
+    transform 0.3s ease,
+    padding 0.3s ease;
 
   min-width: 200px;
-  padding: 1lh;
 }
 
 .menuItem {
@@ -31,19 +36,12 @@
   border: none;
 }
 
-.menu-link {
-  display: block;
-  padding: 0.5lh 80px;
-}
-
-.menu-link:hover,
-.menu-link:focus-visible {
-  background-color: #f5cac3;
-}
-
 .dropdownButton.dropdownOpen~.menuDropdown {
-  clip-path: inset(0 0 0 0);
+  overflow: scroll;
+  max-height: 320px;
+  padding: 1lh;
   opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 
   border-radius: 15px;

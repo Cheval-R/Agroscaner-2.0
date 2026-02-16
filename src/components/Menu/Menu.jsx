@@ -3,8 +3,9 @@ import Capsule from "../UI/Capsule/Capsule";
 import style from "./Menu.module.scss";
 import { useProgramContext } from "../Context/AppContext";
 
-const Menu = ({ programData }) => {
-  const { activeSelection, changeActiveProgram } = useProgramContext();
+const Menu = ({ dropDownList }) => {
+  const { activeSelection, changeActiveProgram, isMobileDisplay } =
+    useProgramContext();
   const isMenuHoveredRef = useRef(false);
   const timerIdRef = useRef(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
@@ -34,32 +35,52 @@ const Menu = ({ programData }) => {
   };
 
   return (
-    <div
-      className="menu"
-      onMouseEnter={onHoverHandler}
-      onMouseLeave={onMouseLeaveHandler}
-    >
-      <Capsule.Button
-        className={`${style.dropdownButton} ${isDropdownOpened ? style.dropdownOpen : ""}`}
-        isActive={programData.key === activeSelection.program.key}
-        onClickHandler={() => {
-          changeActiveProgram(programData.key, programData.label);
-        }}
-      >
-        <p className={style.menuLabel}>{programData.label}</p>
-      </Capsule.Button>
-      <MenuDropdown dropdown={programData} />
-    </div>
+    <>
+      {isMobileDisplay ? (
+        // Изменить на хэндлер онклик чтобы был клик мимо меню
+        <div
+          className="menu"
+          onMouseEnter={onHoverHandler}
+          onMouseLeave={onMouseLeaveHandler}
+        >
+          <Capsule.Button
+            className={`${style.dropdownButton} ${isDropdownOpened ? style.dropdownOpen : ""}`}
+            isActive={dropDownList.key === activeSelection.program.key}
+            onClickHandler={() => {
+              changeActiveProgram(dropDownList.key, dropDownList.label);
+            }}
+          >
+            <p className={style.menuLabel}>{dropDownList.label}</p>
+          </Capsule.Button>
+          <MenuDropdown dropdownList={dropDownList} />
+        </div>
+      ) : (
+        <div
+          className="menu"
+          onMouseEnter={onHoverHandler}
+          onMouseLeave={onMouseLeaveHandler}
+        >
+          <Capsule.Button
+            className={`${style.dropdownButton} ${isDropdownOpened ? style.dropdownOpen : ""}`}
+            isActive={dropDownList.key === activeSelection.program.key}
+            onClickHandler={() => {
+              changeActiveProgram(dropDownList.key, dropDownList.label);
+            }}
+          >
+            <p className={style.menuLabel}>{dropDownList.label}</p>
+          </Capsule.Button>
+          <MenuDropdown dropdownList={dropDownList} />
+        </div>
+      )}
+    </>
   );
 };
 
-const MenuDropdown = ({ dropdown }) => {
-  console.log(dropdown);
-
+const MenuDropdown = ({ dropdownList }) => {
   const { activeSelection, changeActiveClient } = useProgramContext();
   return (
     <ul className={style.menuDropdown}>
-      {dropdown.innerList.map((item) => {
+      {dropdownList.innerList.map((item) => {
         return (
           <li key={item.key}>
             <Capsule.Button
@@ -67,8 +88,8 @@ const MenuDropdown = ({ dropdown }) => {
               isActive={item.key === activeSelection.client.key}
               onClickHandler={() => {
                 changeActiveClient(
-                  dropdown.key,
-                  dropdown.label,
+                  dropdownList.key,
+                  dropdownList.label,
                   item.key,
                   item.label,
                 );
