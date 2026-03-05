@@ -1,69 +1,89 @@
 import Menu from "../Menu/Menu";
 import logoTahs from "/logo-tahs.png";
 import logoLab from "/logo-lab.png";
-import Capsule from "../UI/Capsule/Capsule";
-import burgerStyles from "../UI/Burger/Burger.module.scss";
 import Burger from "../UI/Burger/Burger";
-import styles from "./Header.module.scss";
+import ss from "./Header.module.scss";
 import { useProgramContext } from "../Context/AppContext";
-import { useMediaQuery } from "../../hooks/useMediaQuery";
 import PROGRAM_LIST from "../../data/programList";
+import Bubble, { BubbleButton, BubbleLink } from "../UI/Bubble/Bubble";
+import useDropdown from "../../hooks/useDropdown";
 
 const Header = () => {
-  const { activeSelection, isMobileDisplay } = useProgramContext();
   return (
-    <header className={`${styles.header} container`}>
-      <div className={styles.headerContent}>
-        <HeaderTop calculatorLabel={activeSelection.program.label} />
-        <HeaderContent isMobileDisplay={isMobileDisplay} />
+    <header className={`${ss.header} container`}>
+      <div className={ss.headerContent}>
+        <HeaderTop />
+        <HeaderContent />
       </div>
     </header>
   );
 };
 
-const HeaderTop = ({ calculatorLabel }) => {
+const HeaderTop = () => {
+  const { activeSelection } = useProgramContext();
+
   return (
-    <div className={styles.headerTop}>
-      <Capsule.Link
+    <div className={ss.headerTop}>
+      <BubbleLink
         href="#!"
-        className={styles.tahsLogo}
+        className={ss.tahsLogo}
       >
         <img
           src={logoTahs}
           alt="Логотип компании"
         />
-      </Capsule.Link>
-      <Capsule
+      </BubbleLink>
+      <Bubble
         tag="h1"
-        className={`${styles.headerTitle}`}
+        className={`${ss.headerTitle}`}
       >
-        {calculatorLabel}
+        {activeSelection.programKey}
         {/* Калькулятор расчёта доз удобрений */}
-      </Capsule>
-      <Capsule.Link
+      </Bubble>
+      <BubbleLink
         href="#!"
-        className={styles.labLogo}
+        className={ss.labLogo}
       >
         <img
           src={logoLab}
           alt="логотип лаборатории"
         />
-      </Capsule.Link>
+      </BubbleLink>
     </div>
   );
 };
 
-const HeaderContent = ({ isMobileDisplay }) => {
-  return isMobileDisplay ? <Burger /> : <HeaderNav />;
+const HeaderContent = () => {
+  const { isOpen, toClose, toOpen, wrapperRef } = useDropdown();
+  const { isMobileDisplay } = useProgramContext();
+  const burgerToggleHandler = () => {
+    isOpen ? toClose() : toOpen();
+  };
+  return isMobileDisplay ? (
+    <div
+      className={ss.burgerWrapper}
+      ref={wrapperRef}
+    >
+      <Burger
+        isOpen={isOpen}
+        onClick={burgerToggleHandler}
+      />
+      <HeaderNav
+        isBurgerOpen={isOpen}
+        isBurgerOn={isMobileDisplay}
+      />
+    </div>
+  ) : (
+    <HeaderNav />
+  );
 };
 
-const HeaderNav = ({ isBurgerOpen }) => {
-  const { isMobileDisplay } = useProgramContext();
+const HeaderNav = ({ isBurgerOpen, isBurgerOn }) => {
   return (
     <nav
-      className={`${isMobileDisplay ? burgerStyles.burgerNav : ""} ${isBurgerOpen ? burgerStyles.burgerNavOpen : ""}`}
+      className={`${isBurgerOn ? ss.burgerNav : ""} ${isBurgerOpen ? ss.burgerNavOpen : ""}`}
     >
-      <ul className={styles.navList}>
+      <ul className={ss.navList}>
         {PROGRAM_LIST.map((program) => {
           return (
             <NavItem
@@ -78,21 +98,21 @@ const HeaderNav = ({ isBurgerOpen }) => {
 };
 
 const NavItem = ({ item }) => {
-  const { changeActiveProgram, activeSelection } = useProgramContext();
+  const { setActiveSelection, activeSelection } = useProgramContext();
 
   return (
-    <li className={styles.navItem}>
+    <li className={ss.navItem}>
       {item?.innerList ? (
-        <Menu dropDownList={item} />
+        <Menu data={item} />
       ) : (
-        <Capsule.Button
-          isActive={item.key === activeSelection.program.key}
-          onClickHandler={() => {
-            changeActiveProgram(item.key, item.label);
+        <BubbleButton
+          isActive={item.key === activeSelection.programKey}
+          onClick={() => {
+            setActiveSelection({ programKey: item.key, clientKey: null });
           }}
         >
           {item.label}
-        </Capsule.Button>
+        </BubbleButton>
       )}
     </li>
   );

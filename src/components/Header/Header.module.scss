@@ -57,20 +57,25 @@ $gap-size: 10px;
 
 
 .navList {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: $gap-size;
 
   text-align: center;
 
   @media (max-width: 450px) {
+    grid-template-columns: 1fr;
     flex-direction: column;
   }
 }
 
 .navItem {
+
   font-size: 18px;
+
+  &>button {
+    width: 100%;
+  }
 
   @media (max-width: 650px) {
     font-size: clamp(10px, 2vw, 14px);
@@ -82,5 +87,71 @@ $gap-size: 10px;
     &>* {
       width: 100%;
     }
+  }
+}
+
+.burgerWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.menu-item {
+  display: block;
+  padding: 8px;
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, .2)
+}
+
+.burgerNav {
+  @media (max-width: 450px) {
+    position: absolute;
+    top: 0;
+    left: 15%;
+    display: grid;
+    gap: 10px;
+    width: max-content;
+
+    overflow: hidden;
+    max-height: 0;
+    padding: 0;
+    opacity: 0;
+
+    pointer-events: none;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.2s ease,
+      transform 0.3s ease,
+      padding 0.3s ease;
+
+    min-width: 200px;
+  }
+
+}
+
+.burgerNavOpen {
+  @media (max-width: 450px) {
+    z-index: 10;
+    overflow: visible;
+    max-height: 320px;
+    padding: 1lh;
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+
+    border-radius: 15px;
+    // border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 1);
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+    outline: 2px solid rgba(0, 0, 0, 0);
+    // left: 0;
+    // // transform: translate(-50%, 0);
   }
 }

@@ -1,28 +1,15 @@
-import { useState } from "react";
-import styles from "./Burger.module.scss";
-import Header from "../../Header/Header";
-import Capsule from "../Capsule/Capsule";
-import { useProgramContext } from "../../Context/AppContext";
+import ss from "./Burger.module.scss";
+import { BubbleButton } from "../Bubble/Bubble";
+// import { useProgramContext } from "../../Context/AppContext";
 
-const Burger = () => {
-  const { isMobileDisplay } = useProgramContext();
-  const [isBurgerOpen, setIsBurgerOpen] = useState(false);
-  const burgerToggleHandler = () => {
-    setIsBurgerOpen((prev) => !prev);
-  };
+const Burger = ({ isOpen, onClick }) => {
   return (
-    <div className={styles.burgerWrapper}>
-      <Capsule.Button
-        isBox={true}
-        className={styles.burgerButton}
-        onClickHandler={burgerToggleHandler}
-      >
-        <span
-          className={`${styles.burger} ${isBurgerOpen ? styles.burgerActive : ""}`}
-        ></span>
-      </Capsule.Button>
-      <Header.HeaderNav isBurgerOpen={isBurgerOpen} />
-    </div>
+    <BubbleButton
+      className={ss.burgerButton}
+      onClick={onClick}
+    >
+      <span className={`${ss.burger} ${isOpen ? ss.burgerActive : ""}`}></span>
+    </BubbleButton>
   );
 };
 

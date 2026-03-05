@@ -6,9 +6,9 @@ import NitrogenFeedingCalculator from "./pages/Nitrogen/NitrogenFeedingCalculato
 
 export default function App() {
   const screens = {
-    "nitrogen-feeding-calculator": <NitrogenFeedingCalculator />,
     "mineral-fertilizer-calculator": <MineralFertilizerCalculator />,
     "corn-silage-harvest-calculator": <CornSilageHarvestCalculator />,
+    "nitrogen-feeding-calculator": <NitrogenFeedingCalculator />,
   };
 
   const { activeSelection } = useProgramContext();
@@ -16,8 +16,10 @@ export default function App() {
   return (
     <>
       <Header />
-      {screens[activeSelection.program.key] ??
-        "Ошибка выбора программы, попробуйте позже"}
+      {
+        screens[activeSelection.programKey] ?? <MineralFertilizerCalculator />
+        // "Ошибка выбора программы, попробуйте позже"
+      }
     </>
   );
 }

@@ -1,11 +1,11 @@
 .capsule {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  // display: inline-flex;
+  // align-items: center;
+  // justify-content: center;
 
-  width: fit-content;
+  // width: fit-content;
   // width: 100%;
-  padding: 0.4lh 0.94lh;
+  padding: 0.4lh;
   height: max-content;
 
   border-radius: 25px;
@@ -96,5 +96,37 @@
   &:active {
     transform: none;
 
+  }
+}
+
+.capsuleInput {
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
+  }
+}
+
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.capsuleLegend {
+  position: absolute;
+  top: -5px;
+  left: 10%;
+  color: #8b8b8b;
+  display: inline-block;
+  font-size: 12px;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  @media (max-width: 550px) {
+    font-size: 8px;
   }
 }

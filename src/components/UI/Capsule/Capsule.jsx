@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styles from "./Capsule.module.scss";
 
 const Capsule = ({
@@ -6,15 +7,25 @@ const Capsule = ({
   tag = "div",
   isBox = false,
   isActive = false,
-  ß,
+  legend = undefined,
 }) => {
   const Tag = tag;
-  return (
+
+  return legend === undefined ? (
     <Tag
       className={`${styles.capsule} ${isBox ? styles.capsuleBox : ""} ${isActive ? styles.capsuleActive : ""} ${styles.capsuleNotInteractive} ${className}`}
     >
       {children}
     </Tag>
+  ) : (
+    <div className={styles.inputWrapper}>
+      <span className={styles.capsuleLegend}>{legend}</span>
+      <Tag
+        className={`${styles.capsule} ${isBox ? styles.capsuleBox : ""} ${isActive ? styles.capsuleActive : ""} ${styles.capsuleNotInteractive} ${className}`}
+      >
+        {children}
+      </Tag>
+    </div>
   );
 };
 
@@ -24,17 +35,20 @@ const Button = ({
   isActive = false,
   isBox = false,
   onClickHandler = () => {},
+  id = "",
 }) => {
   return (
     <button
       className={`${styles.capsule} ${isBox ? styles.capsuleBox : ""} ${isActive ? styles.capsuleActive : ""} ${className}`}
       onClick={onClickHandler}
       type="button"
+      id={id}
     >
       {children}
     </button>
   );
 };
+
 const Link = ({
   children,
   href,
@@ -52,13 +66,43 @@ const Link = ({
   );
 };
 
-const Input = ({ type, id }) => {
-  return (
+const Input = ({
+  type = "text",
+  id,
+  className = "",
+  value,
+  onInput = undefined,
+  onFocus = undefined,
+  onBlur = undefined,
+  legend = undefined,
+}) => {
+  return legend === undefined ? (
     <input
-      className={styles.capsule}
+      className={`${styles.capsule} ${styles.capsuleInput} ${className}`}
       type={type}
       id={id}
+      value={value}
+      onInput={onInput}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
+  ) : (
+    <div className={styles.inputWrapper}>
+      <span
+        className={styles.capsuleLegend}
+        htmlFor={id}
+      >
+        {legend}
+      </span>
+      <input
+        className={`${styles.capsule} ${styles.capsuleInput} ${className}`}
+        type={type}
+        value={value}
+        onInput={onInput}
+        onFocus={onFocus}
+        onBlur={onBlur}
+      />
+    </div>
   );
 };
 
