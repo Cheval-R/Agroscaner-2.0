@@ -31,7 +31,10 @@ const formReducer = (calculatorInput, action) => {
           ...calculatorInput.ui,
           selectQueries: {
             ...calculatorInput.ui.selectQueries,
-            [paramKey]: value,
+            [groupKey]: {
+              ...calculatorInput.ui.selectQueries[paramKey],
+              [paramKey]: value,
+            },
           },
         },
       };
@@ -62,7 +65,10 @@ const formReducer = (calculatorInput, action) => {
         ui: {
           selectQueries: {
             ...calculatorInput.ui.selectQueries,
-            [paramKey]: option.label,
+            [groupKey]: {
+              ...calculatorInput.ui.selectQueries[paramKey],
+              [paramKey]: option.label,
+            },
           },
         },
       };
@@ -75,17 +81,17 @@ const formReducer = (calculatorInput, action) => {
 const useCalculatorInput = () => {
   const [formState, dispatch] = useReducer(formReducer, {
     form: {
-      nitrogen: { soilValue: "", nitrogenFertilizer: "", price: "" },
-      phosphorus: { soilValue: "", phosphorusFertilizer: "", price: "" },
-      potassium: { soilValue: "", potassiumFertilizer: "", price: "" },
+      nitrogen: { soilValue: "", fertilizer: "", price: "" },
+      phosphorus: { soilValue: "", fertilizer: "", price: "" },
+      potassium: { soilValue: "", fertilizer: "", price: "" },
       field: { area: "", crop: "", harvest: "" },
     },
     ui: {
       selectQueries: {
-        nitrogenFertilizer: "",
-        phosphorusFertilizer: "",
-        potassiumFertilizer: "",
-        crop: "",
+        nitrogen: { fertilizer: "" },
+        phosphorus: { fertilizer: "" },
+        potassium: { fertilizer: "" },
+        field: { crop: "" },
       },
     },
   });

@@ -3,7 +3,14 @@ import { BubbleInput } from "../Bubble/Bubble";
 import Dropdown from "../Dropdown/Dropdown";
 import usePopover from "../../hooks/usePopover";
 
-const Select = ({ optionsList, value, legend, onChange, onOptionSelect }) => {
+const Select = ({
+  optionsList,
+  value,
+  activeKey,
+  legend,
+  onChange,
+  onOptionSelect,
+}) => {
   const { isOpen, toClose, toOpen, wrapperRef } = usePopover();
 
   const clearQuery =
@@ -28,6 +35,7 @@ const Select = ({ optionsList, value, legend, onChange, onOptionSelect }) => {
         legend={legend}
       />
       <Dropdown
+        activeItemKey={activeKey}
         dropdownList={filteredOptions ?? optionsList}
         isOpen={isOpen}
         onClick={(option) => {

@@ -1,46 +1,52 @@
-import Bubble, { BubbleInput } from "../../../../components/UI/Bubble/Bubble";
-import Select from "../../../../components/UI/Select/Select";
-import { Fertilizers } from "../../data/data";
+import Bubble, { BubbleInput } from "../../../../shared/UI/Bubble/Bubble";
+import Select from "../../../../shared/UI/Select/Select";
+import { OPTION_SOURCES } from "../../data/data";
 
 const FertilizerFormCard = ({
-  cardClass,
-  fertilizerData,
-  fertilizerForm,
-  selectQueries,
-  onParamChange,
-  onSearchQueryChange,
-  onOptionSelect,
+  card,
+  style,
+  formData,
+  onSelectInput,
+  onSelectOption,
+  onInputChange,
 }) => {
   return (
     <Bubble
-      className={cardClass}
-      legend={`${fertilizerData.label}`}
+      legend={card.label}
+      className={style.card}
     >
-      <BubbleInput
-        value={fertilizerForm[fertilizerData.key].soilValue}
-        onChange={(event) => {
-          onParamChange(event.target.value, fertilizerData.key, "soilValue");
-        }}
-        legend={"В почве, мг/кг"}
-      />
-      <Select
-        optionsList={fertilizerData.options}
-        value={selectQueries[`${fertilizerData.key}Query`]}
-        onChange={(event) => {
-          onSearchQueryChange(fertilizerData.key, event.target.value);
-        }}
-        onOptionSelect={(key) => {
-          onOptionSelect(Fertilizers, key, fertilizerData.key);
-        }}
-        legend={"Удобрение"}
-      />
-      <BubbleInput
-        value={fertilizerForm[fertilizerData.key].price}
-        onChange={(event) => {
-          onParamChange(event.target.value, fertilizerData.key, "price");
-        }}
-        legend={"Стоимость, ₽"}
-      />
+      {card.inputs.map((input) => {
+        if (input.type === "select") {
+          return (
+            <Select
+              key={input.key}
+              optionsList={OPTION_SOURCES[input.source]}
+              value={formData.ui.selectQueries[card.key][input.key]}
+              activeKey={formData.form[card.key][input.key]}
+              legend={input.label}
+              onChange={(event) => {
+                onSelectInput(card.key, input.key, event.target.value);
+              }}
+              onOptionSelect={(option) => {
+                onSelectOption(card.key, input.key, option);
+              }}
+            />
+          );
+        }
+        if (input.type === "input") {
+          return (
+            <BubbleInput
+              key={input.key}
+              value={formData.form[card.key][input.key]}
+              legend={input.label}
+              inputType={input.inputType}
+              onChange={(event) => {
+                onInputChange(card.key, input.key, event.target.value);
+              }}
+            />
+          );
+        }
+      })}
     </Bubble>
   );
 };

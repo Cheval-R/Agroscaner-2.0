@@ -29,10 +29,11 @@ export const BubbleButton = ({
   isDisabled = false,
   className = "",
   size = "",
+  type = "button",
 }) => {
   return (
     <button
-      type="button"
+      type={type}
       className={`
         ${ss.bubble}
         ${ss.interactive}
@@ -72,15 +73,17 @@ export const BubbleInput = ({
   ariaLabel = "",
   className = "",
   size = "",
+  inputType = "text",
 }) => {
   const input = (
     <input
       className={`${ss.bubble} ${ss.bubbleInput} ${ss.fitContainer} ${className} ${ss[size]}`}
-      type="text"
+      type={inputType}
       value={value}
       onChange={onChange}
       onFocus={onFocus}
       aria-label={legend ? undefined : ariaLabel}
+      style={{ MozAppearance: "", WebkitAppearance: "none" }}
     />
   );
 

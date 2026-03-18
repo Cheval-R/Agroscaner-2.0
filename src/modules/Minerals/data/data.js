@@ -469,47 +469,6 @@ export const Fertilizers = [
   },
 ];
 
-export const NUTRIENTS = [
-  {
-    key: "nitrogen",
-    label: "Азот",
-    options: [
-      { key: "none", label: "Нет" },
-      { key: "ammiachnaya-selitra", label: "Аммиачная селитра" },
-      { key: "sulfonitrat-30-7", label: "Сульфонитрат (30:7)" },
-      { key: "sulfonitrat-26-13", label: "Сульфонитрат (26:13)" },
-      { key: "kas-28", label: "КАС(28)" },
-      { key: "karbamid", label: "Карбамид" },
-      { key: "sulfat-ammoniya", label: "Сульфат аммония" },
-      { key: "bezvodnyy-ammiak", label: "Безводный аммиак" },
-    ],
-  },
-  {
-    key: "phosphorus",
-    label: "Фосфор",
-    options: [
-      { key: "none", label: "Нет" },
-      { key: "ammofos-52", label: "Аммофос(52)" },
-      { key: "ammofos-46", label: "Аммофос(46)" },
-      { key: "diammofoska", label: "Диаммофоска" },
-      { key: "azofoska-15", label: "Азофоска(15)" },
-      { key: "azofoska-16", label: "Азофоска(16)" },
-      { key: "npks-4", label: "NPKS(4)" },
-      { key: "npks-8", label: "NPKS(8)" },
-      { key: "fosmuka", label: "Фосмука" },
-    ],
-  },
-  {
-    key: "potassium",
-    label: "Калий",
-    options: [
-      { key: "none", label: "Нет" },
-      { key: "kaliy-hloristyy", label: "Калий хлористый" },
-      { key: "kaliy-sernokislyy", label: "Калий сернокислый" },
-    ],
-  },
-];
-
 export const OPTION_SOURCES = {
   Fertilizers,
   Crops,
@@ -522,6 +481,7 @@ export const FormConfig = [
     inputs: [
       {
         type: "input",
+        inputType: "number",
         label: "В почве, мг/кг",
         id: "nitrogen-value",
         key: "soilValue",
@@ -529,12 +489,13 @@ export const FormConfig = [
       {
         type: "select",
         label: "Удобрение",
-        key: "nitrogenFertilizer",
+        key: "fertilizer",
         id: "nitrogen-fertilizer",
         source: "Fertilizers",
       },
       {
         type: "input",
+        inputType: "number",
         label: "Стоимость, ₽",
         id: "nitrogen-price",
         key: "price",
@@ -547,6 +508,7 @@ export const FormConfig = [
     inputs: [
       {
         type: "input",
+        inputType: "number",
         label: "В почве, мг/кг",
         id: "phosphorus-value",
         key: "soilValue",
@@ -554,12 +516,13 @@ export const FormConfig = [
       {
         type: "select",
         label: "Удобрение",
-        key: "phosphorusFertilizer",
+        key: "fertilizer",
         id: "phosphorus-fertilizer",
         source: "Fertilizers",
       },
       {
         type: "input",
+        inputType: "number",
         label: "Стоимость, ₽",
         id: "phosphorus-price",
         key: "price",
@@ -572,6 +535,7 @@ export const FormConfig = [
     inputs: [
       {
         type: "input",
+        inputType: "number",
         label: "В почве, мг/кг",
         id: "potassium-value",
         key: "soilValue",
@@ -579,12 +543,13 @@ export const FormConfig = [
       {
         type: "select",
         label: "Удобрение",
-        key: "potassiumFertilizer",
+        key: "fertilizer",
         id: "potassium-fertilizer",
         source: "Fertilizers",
       },
       {
         type: "input",
+        inputType: "number",
         label: "Стоимость, ₽",
         id: "potassium-price",
         key: "price",
@@ -597,6 +562,7 @@ export const FormConfig = [
     inputs: [
       {
         type: "input",
+        inputType: "number",
         label: "Площадь, га",
         id: "area",
         key: "area",
@@ -610,6 +576,7 @@ export const FormConfig = [
       },
       {
         type: "input",
+        inputType: "number",
         label: "План. урожай",
         id: "harvest",
         key: "harvest",

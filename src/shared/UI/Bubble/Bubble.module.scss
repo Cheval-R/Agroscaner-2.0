@@ -46,6 +46,20 @@
   position: relative;
 }
 
+
+/* Скрытие стрелок для Chrome, Safari, Edge, Opera */
+.bubbleInput[type='number']::-webkit-outer-spin-button,
+.bubbleInput[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Скрытие стрелок для Firefox */
+.bubbleInput[type='number'] {
+  -moz-appearance: textfield;
+
+}
+
 .bubbleLegend {
 
   z-index: 1;
