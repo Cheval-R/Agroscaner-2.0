@@ -1,13 +1,41 @@
-import { createContext, useContext, useState } from "react";
-import { useMediaQuery } from "../../shared/hooks/useMediaQuery";
+import {
+  createContext,
+  useContext,
+  useState,
+  type ReactNode,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
+import { useMediaQuery } from "../../shared/hooks/useMediaQuery.ts";
 import MineralFertilizerCalculator from "../../pages/Minerals/MineralFertilizerCalculator";
 import CornSilageHarvestCalculator from "../../pages/Corn/CornSilageHarvestCalculator";
 import NitrogenFeedingCalculator from "../../pages/Nitrogen/NitrogenFeedingCalculator";
+import type { ProgramKey } from "../types/global.types.ts";
 
-const AppContext = createContext(null);
+interface ActiveSelection {
+  programKey: ProgramKey;
+  clientKey: ClientKey;
+}
 
-export const AppProvider = ({ children }) => {
-  const screens = {
+type ClientKey = string | null;
+
+type ScreenConfig = {
+  component: ReactNode;
+  label: string;
+};
+
+type Screens = Record<ProgramKey, ScreenConfig>;
+
+interface AppContextValue {
+  activeSelection: ActiveSelection;
+  setActiveSelection: Dispatch<SetStateAction<ActiveSelection>>;
+  isMobileDisplay: boolean;
+  screens: Screens;
+}
+const AppContext = createContext<AppContextValue | null>(null);
+
+export const AppProvider = ({ children }: { children: ReactNode }) => {
+  const screens: Screens = {
     "mineral-fertilizer-calculator": {
       component: <MineralFertilizerCalculator />,
       label: "Калькулятор доз минеральных удобрений",
@@ -24,7 +52,7 @@ export const AppProvider = ({ children }) => {
 
   const isMobileDisplay = useMediaQuery(450);
 
-  const [activeSelection, setActiveSelection] = useState({
+  const [activeSelection, setActiveSelection] = useState<ActiveSelection>({
     programKey: "mineral-fertilizer-calculator",
     clientKey: null,
   });
@@ -38,10 +66,10 @@ export const AppProvider = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const useProgramContext = () => {
+export const useProgramContext = (): AppContextValue => {
   const ctx = useContext(AppContext);
-  if (!ctx) {
-    throw new Error("useProgramContext must be used inside ProgramProvider");
+  if (ctx === null) {
+    throw new Error("useProgramContext must be used inside AppProvider");
   }
   return ctx;
 };

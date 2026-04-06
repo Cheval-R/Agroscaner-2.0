@@ -1,4 +1,12 @@
-const PROGRAM_LIST = [
+import type { Identifiers, ProgramKey } from "./../app/types/global.types";
+
+export interface IProgram {
+  key: ProgramKey;
+  label: string;
+  innerList?: Identifiers[];
+}
+
+const PROGRAM_LIST: IProgram[] = [
   {
     label: "Расчёт минеральных удобрений",
     key: "mineral-fertilizer-calculator",

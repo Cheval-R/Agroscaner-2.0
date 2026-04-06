@@ -1,10 +1,11 @@
-import { useProgramContext } from "../../../app/providers/AppContext.jsx";
-import { BubbleButton } from "../Bubble/Bubble.jsx";
-import Dropdown from "../Dropdown/Dropdown.jsx";
-import usePopover from "../../hooks/usePopover.js";
+import { useProgramContext } from "../../../app/providers/AppContext";
+import { BubbleButton } from "../Bubble/Bubble";
+import Dropdown from "../Dropdown/Dropdown";
+import usePopover from "../../hooks/usePopover";
 import ss from "./Menu.module.scss";
+import type { IProgram } from "../../../data/programList";
 
-const Menu = ({ data }) => {
+const Menu = ({ data }: { data: IProgram }) => {
   const { activeSelection, setActiveSelection } = useProgramContext();
   const {
     isOpen,
@@ -36,15 +37,17 @@ const Menu = ({ data }) => {
       >
         <p className={ss.menuLabel}>{data.label}</p>
       </BubbleButton>
-      <Dropdown
-        dropdownList={data.innerList}
-        onClick={(client) => {
-          setActiveSelection({ programKey: data.key, clientKey: client.key });
-          toClose();
-        }}
-        isOpen={isOpen}
-        activeItemKey={activeSelection.clientKey}
-      />
+      {data.innerList ? (
+        <Dropdown
+          dropdownList={data.innerList}
+          onClick={(client) => {
+            setActiveSelection({ programKey: data.key, clientKey: client.key });
+            toClose();
+          }}
+          isOpen={isOpen}
+          activeItemKey={activeSelection.clientKey}
+        />
+      ) : null}
     </div>
   );
 };

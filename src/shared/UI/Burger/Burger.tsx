@@ -2,7 +2,12 @@ import ss from "./Burger.module.scss";
 import { BubbleButton } from "../Bubble/Bubble";
 // import { useProgramContext } from "../../Context/AppContext";
 
-const Burger = ({ isOpen, onClick }) => {
+interface Props {
+  isOpen: boolean;
+  onClick: () => void;
+}
+
+const Burger = ({ isOpen, onClick }: Props) => {
   return (
     <BubbleButton
       className={ss.burgerButton}

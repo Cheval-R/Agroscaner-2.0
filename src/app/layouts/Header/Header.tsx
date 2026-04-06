@@ -4,7 +4,7 @@ import logoLab from "../../../shared/assets/logo-lab.png";
 import Burger from "../../../shared/UI/Burger/Burger";
 import ss from "./Header.module.scss";
 import { useProgramContext } from "../../providers/AppContext";
-import PROGRAM_LIST from "../../../data/programList";
+import PROGRAM_LIST, { type IProgram } from "../../../data/programList";
 import Bubble, {
   BubbleButton,
   BubbleLink,
@@ -74,7 +74,7 @@ const HeaderContent = () => {
       />
       <HeaderNav
         isBurgerOpen={isOpen}
-        isBurgerOn={isMobileDisplay}
+        isMobileDisplay={isMobileDisplay}
       />
     </div>
   ) : (
@@ -82,17 +82,23 @@ const HeaderContent = () => {
   );
 };
 
-const HeaderNav = ({ isBurgerOpen, isBurgerOn }) => {
+const HeaderNav = ({
+  isBurgerOpen,
+  isMobileDisplay,
+}: {
+  isBurgerOpen?: boolean;
+  isMobileDisplay?: boolean;
+}) => {
   return (
     <nav
-      className={`${isBurgerOn ? ss.burgerNav : ""} ${isBurgerOpen ? ss.burgerNavOpen : ""}`}
+      className={`${isMobileDisplay ? ss.burgerNav : ""} ${isBurgerOpen ? ss.burgerNavOpen : ""}`}
     >
       <ul className={ss.navList}>
         {PROGRAM_LIST.map((program) => {
           return (
             <NavItem
-              item={program}
               key={program.key}
+              item={program}
             />
           );
         })}
@@ -101,7 +107,7 @@ const HeaderNav = ({ isBurgerOpen, isBurgerOn }) => {
   );
 };
 
-const NavItem = ({ item }) => {
+const NavItem = ({ item }: { item: IProgram }) => {
   const { setActiveSelection, activeSelection } = useProgramContext();
 
   return (

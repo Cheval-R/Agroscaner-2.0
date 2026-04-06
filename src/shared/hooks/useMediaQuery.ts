@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
-export function useMediaQuery(query) {
+export function useMediaQuery(query: number) {
   const [matches, setMatches] = useState(false);
   useEffect(() => {
     const mediaQuery = window.matchMedia(`(max-width: ${query}px)`);
     setMatches(mediaQuery.matches);
 
-    const handler = (event) => {
+    const handler = (event: MediaQueryListEvent) => {
       setMatches(event.matches);
     };
 

@@ -1,17 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { useDeviceType } from "./useDeviceType";
 
-const usePopover = () => {
-  const timerIdRef = useRef(null);
-  const isMenuHoveredRef = useRef(false);
-  const wrapperRef = useRef(null);
+const usePopover = (whenClose?: () => void) => {
+  const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMenuHoveredRef = useRef<boolean>(false);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const caps = useDeviceType();
 
   useEffect(() => {
-    const clickOutOfSelect = (event) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+    const clickOutOfSelect = (event: PointerEvent) => {
+      if (
+        wrapperRef.current &&
+        event.target instanceof Node &&
+        !wrapperRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
+        whenClose?.();
       }
     };
     document.addEventListener("pointerdown", clickOutOfSelect);

@@ -1,11 +1,20 @@
+import type { Identifiers } from "../../../app/types/global.types";
+
 import Bubble, { BubbleButton } from "../Bubble/Bubble";
 import ss from "./Dropdown.module.scss";
 
-const Dropdown = ({ dropdownList, isOpen, onClick, activeItemKey }) => {
+interface Props {
+  dropdownList: Identifiers[];
+  isOpen: boolean;
+  onClick: (item: Identifiers) => void;
+  activeItemKey: string | null;
+}
+
+const Dropdown = ({ dropdownList, isOpen, onClick, activeItemKey }: Props) => {
   return (
     <Bubble
       tag={"ul"}
-      size="sm"
+      bubbleSize="sm"
       className={`${ss.dropdown} ${isOpen ? ss.isOpen : ""}`}
     >
       {dropdownList.length > 0 ? (
@@ -16,7 +25,7 @@ const Dropdown = ({ dropdownList, isOpen, onClick, activeItemKey }) => {
                 className={ss.item}
                 onClick={() => onClick(item)}
                 isActive={item.key === activeItemKey}
-                size={"sm"}
+                bubbleSize={"sm"}
               >
                 {item.label}
               </BubbleButton>
@@ -24,7 +33,7 @@ const Dropdown = ({ dropdownList, isOpen, onClick, activeItemKey }) => {
           );
         })
       ) : (
-        <li>No Data</li>
+        <li>Не найдено</li>
       )}
     </Bubble>
   );
