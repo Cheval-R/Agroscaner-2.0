@@ -11,6 +11,13 @@ import MineralFertilizerCalculator from "../../pages/Minerals/MineralFertilizerC
 import CornSilageHarvestCalculator from "../../pages/Corn/CornSilageHarvestCalculator";
 import NitrogenFeedingCalculator from "../../pages/Nitrogen/NitrogenFeedingCalculator";
 import type { ProgramKey } from "../types/global.types.ts";
+import type { IManualFormSchema } from "../../modules/Minerals/types/minerals.types.ts";
+import type { IClientFormSchema } from "../../modules/Minerals/components/ClientForm/ClientForm.types.ts";
+import {
+  Crops,
+  Fertilizers,
+  IClientFormConfig,
+} from "../../modules/Minerals/data/data.ts";
 
 interface ActiveSelection {
   programKey: ProgramKey;
@@ -54,7 +61,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const [activeSelection, setActiveSelection] = useState<ActiveSelection>({
     programKey: "mineral-fertilizer-calculator",
-    clientKey: null,
+    clientKey: null, // 'nur'
   });
 
   const value = {

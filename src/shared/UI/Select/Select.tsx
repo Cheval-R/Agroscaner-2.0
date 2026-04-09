@@ -8,7 +8,7 @@ import type { Identifiers } from "../../../app/types/global.types";
 interface Props {
   optionsList: Identifiers[];
   activeKey: string;
-  legend: string;
+  legend?: string;
   selectOption: (optionKey: string) => void;
   onBlur: React.FocusEventHandler<HTMLInputElement>;
   errorMessage: string | undefined;

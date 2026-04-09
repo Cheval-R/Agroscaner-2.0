@@ -1,3 +1,4 @@
+import { Clients } from "../modules/Minerals/data/data";
 import type { Identifiers, ProgramKey } from "./../app/types/global.types";
 
 export interface IProgram {
@@ -11,23 +12,9 @@ const PROGRAM_LIST: IProgram[] = [
     label: "Расчёт минеральных удобрений",
     key: "mineral-fertilizer-calculator",
 
-    innerList: [
-      {
-        key: "pecherskoeStavropol",
-        label: "Печерское (Ставропольский район)",
-      },
-      {
-        key: "pecherskoeSyzran",
-        label: "Печерское (Сызранский район)",
-      },
-      { key: "planin", label: "КФХ Планин" },
-      { key: "nur", label: "ООО АФ НУР" },
-      { key: "duslyk", label: "ООО АФ Дуслык" },
-      { key: "anyak", label: "ООО АФ Аняк" },
-      { key: "tuganYak", label: "ООО АФ Родные края - Туган Як" },
-      { key: "staromainskaya", label: "АО АФ Старомайнская" },
-      { key: "abdullin", label: "КФХ Абдуллин" },
-    ],
+    innerList: Clients.map((client) => {
+      return { key: client.key, label: client.label };
+    }),
   },
   {
     label: "Расчёт сроков уборки кукурузы",

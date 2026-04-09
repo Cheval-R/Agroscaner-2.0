@@ -12,6 +12,7 @@
   --bubble-radius: 25px;
 
   position: relative;
+  box-sizing: border-box;
   // display: inline-flex;
   // align-items: center;
   // justify-content: center;
@@ -46,6 +47,7 @@
 }
 
 .bubbleInputWrapper {
+  display: block;
   position: relative;
   width: 100%;
 }
@@ -78,6 +80,11 @@
 
 .bubbleLegend {
   top: -5px;
+}
+
+.bubbleLegendBold {
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .bubbleError {

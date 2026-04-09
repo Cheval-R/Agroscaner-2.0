@@ -14,11 +14,13 @@ import usePopover from "../../../shared/hooks/usePopover";
 
 const Header = () => {
   return (
-    <header className={`${ss.header} container`}>
-      <div className={ss.headerContent}>
-        <HeaderTop />
-        <HeaderContent />
-      </div>
+    <header className={`${ss.header} section`}>
+      <section className="container">
+        <div className={ss.headerContent}>
+          <HeaderTop />
+          <HeaderContent />
+        </div>
+      </section>
     </header>
   );
 };
@@ -108,7 +110,7 @@ const HeaderNav = ({
 };
 
 const NavItem = ({ item }: { item: IProgram }) => {
-  const { setActiveSelection, activeSelection } = useProgramContext();
+  const { activeSelection, setActiveSelection } = useProgramContext();
 
   return (
     <li className={ss.navItem}>

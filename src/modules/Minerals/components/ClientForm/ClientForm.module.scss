@@ -1,0 +1,95 @@
+.title {
+  width: fit-content;
+  max-width: min(100%, 720px);
+  margin: 0 auto 24px;
+  padding: 14px 28px;
+
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(20px, 1.6vw, 28px);
+  line-height: 1.1;
+  color: #243447;
+
+  text-wrap: balance;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: minmax(290px, 360px) minmax(420px, 1fr);
+  align-items: stretch;
+  gap: clamp(18px, 2vw, 28px);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.card {
+  display: grid;
+  align-content: space-between;
+  gap: 14px;
+  height: 100%;
+  min-width: 0;
+  min-height: 100%;
+  padding: clamp(18px, 2vw, 24px);
+}
+
+// .card > * {
+//   width: 100%;
+//   min-width: 0;
+// }
+
+.fieldCard,
+.fertilizerCard {
+  grid-auto-rows: minmax(0, auto);
+}
+
+.fertilizerSection {
+  display: grid;
+  gap: 10px;
+}
+
+.rowTitle {
+  padding-inline: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.1;
+  color: #304255;
+}
+
+.cardRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.cardRow>* {
+  width: 100%;
+  min-width: 0;
+}
+
+.expandFullWidth {
+  grid-column: 1/-1;
+}
+
+@media (max-width: 780px) {
+  .form {
+    grid-template-columns: 1fr;
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 720px) {
+  .title {
+    margin-bottom: 18px;
+    padding-inline: 20px;
+  }
+
+  .card {
+    gap: 12px;
+    padding: 18px;
+  }
+
+  .cardRow {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,8 +1,6 @@
 $gap-size: 10px;
 
-.header {
-  padding: 15px;
-}
+.header {}
 
 .headerContent {
   display: flex;
@@ -54,6 +52,7 @@ $gap-size: 10px;
     font-size: clamp(14px, 4.5vw, 28px);
   }
 }
+
 
 
 .navList {

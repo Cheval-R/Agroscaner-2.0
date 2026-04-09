@@ -4,8 +4,9 @@ import ss from "./Bubble.module.scss";
 interface IBubbleProps {
   children?: ReactNode;
   className?: string;
+  bubbleSize?: "sm" | "lg" | "";
   legend?: string;
-  bubbleSize?: string;
+  legendSize?: "paragraph" | "title";
 }
 
 interface IBubbleWrapperProps extends IBubbleProps {
@@ -25,7 +26,8 @@ const Bubble = ({
   children,
   className = "",
   legend = "",
-  bubbleSize = "lg",
+  bubbleSize = "",
+  legendSize = "paragraph",
 }: IBubbleWrapperProps) => {
   const Tag = tag;
   return (
@@ -36,7 +38,13 @@ const Bubble = ({
         ${className}
       `}
     >
-      {legend !== "" ? <span className={ss.bubbleLegend}>{legend}</span> : null}
+      {legend !== "" ? (
+        <span
+          className={`${ss.bubbleLegend} ${legendSize === "title" ? ss.bubbleLegendBold : ""}`}
+        >
+          {legend}
+        </span>
+      ) : null}
       {children}
     </Tag>
   );
