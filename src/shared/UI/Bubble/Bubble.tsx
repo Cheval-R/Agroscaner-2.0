@@ -1,5 +1,6 @@
 import React, { forwardRef, type JSX, type ReactNode } from "react";
 import ss from "./Bubble.module.scss";
+import { useLocation, useNavigate, type LinkProps } from "react-router-dom";
 
 interface IBubbleProps {
   children?: ReactNode;
@@ -39,11 +40,7 @@ const Bubble = ({
       `}
     >
       {legend !== "" ? (
-        <span
-          className={`${ss.bubbleLegend} ${legendSize === "title" ? ss.bubbleLegendBold : ""}`}
-        >
-          {legend}
-        </span>
+        <span className={`${ss.bubbleLegend} ${legendSize === "title" ? ss.bubbleLegendBold : ""}`}>{legend}</span>
       ) : null}
       {children}
     </Tag>
@@ -51,7 +48,7 @@ const Bubble = ({
 };
 
 interface IBubbleButtonProps extends IBubbleProps {
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
   isActive?: boolean;
   isDisabled?: boolean;
   type?: TButtonType;
@@ -85,11 +82,7 @@ export const BubbleButton = ({
   );
 };
 
-export const BubbleLink = ({
-  href,
-  children,
-  className = "",
-}: IBubbleLinkProps) => {
+export const BubbleLink = ({ href, children, className = "" }: IBubbleLinkProps) => {
   return (
     <a
       href={href}
@@ -104,6 +97,30 @@ export const BubbleLink = ({
   );
 };
 
+interface IBubbleRouterLinkProps extends IBubbleProps {
+  to: LinkProps["to"];
+}
+
+export const BubbleRouterLink = ({ to, children, className = "", bubbleSize = "" }: IBubbleRouterLinkProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  return (
+    <BubbleButton
+      bubbleSize={bubbleSize}
+      isActive={location.pathname.split("/")[1] === to}
+      className={className}
+      onClick={(e: React.MouseEvent) => {
+        e.preventDefault();
+        if (!(location.pathname.split("/")[1] === to)) {
+          navigate(to);
+        }
+      }}
+    >
+      {children}
+    </BubbleButton>
+  );
+};
+
 interface IBubbleInputProps extends IBubbleProps {
   value?: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -112,6 +129,7 @@ interface IBubbleInputProps extends IBubbleProps {
   inputType?: React.InputHTMLAttributes<HTMLInputElement>["type"];
   name?: string;
   errorMessage: string | undefined | null;
+  id?: string;
 }
 
 export const BubbleInput = forwardRef(function BubbleInput(
@@ -126,6 +144,7 @@ export const BubbleInput = forwardRef(function BubbleInput(
     bubbleSize = "",
     name = "",
     errorMessage = null,
+    id = "",
   }: IBubbleInputProps,
   ref: React.Ref<HTMLInputElement>,
 ) {
@@ -141,6 +160,7 @@ export const BubbleInput = forwardRef(function BubbleInput(
       ref={ref}
       name={name}
       style={{ MozAppearance: "none", WebkitAppearance: "none" }}
+      id={id}
     />
   );
 
@@ -148,9 +168,7 @@ export const BubbleInput = forwardRef(function BubbleInput(
     <label className={ss.bubbleInputWrapper}>
       {legend ? <span className={ss.bubbleLegend}>{legend}</span> : null}
       {input}
-      {errorMessage ? (
-        <span className={ss.bubbleError}>{errorMessage}</span>
-      ) : null}
+      {errorMessage ? <span className={ss.bubbleError}>{errorMessage}</span> : null}
     </label>
   );
 });

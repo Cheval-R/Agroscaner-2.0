@@ -1,0 +1,14 @@
+.marker {
+  position: relative;
+  width: 5px;
+  height: 5px;
+  /* background-color: rebeccapurple; */
+  transform: translate(-50%, -100%);
+
+  content: "";
+
+  display: block;
+  background-image: url("./../../../shared/assets/pin.svg");
+  width: 20px;
+  height: 32px;
+}

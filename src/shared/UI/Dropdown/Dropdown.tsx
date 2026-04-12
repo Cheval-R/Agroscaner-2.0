@@ -7,7 +7,7 @@ interface Props {
   dropdownList: Identifiers[];
   isOpen: boolean;
   onClick: (item: Identifiers) => void;
-  activeItemKey: string | null;
+  activeItemKey?: string | null;
 }
 
 const Dropdown = ({ dropdownList, isOpen, onClick, activeItemKey }: Props) => {

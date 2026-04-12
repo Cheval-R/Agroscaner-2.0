@@ -30,12 +30,14 @@ const ManualForm = ({
         field: { area: 123, harvest: 123, crop: "pshenitsa-yarovaya" },
       },
     });
-  const onSubmit: SubmitHandler<IManualFormSchema> = (data) => calculate(data);
+  const customOnSubmit: SubmitHandler<IManualFormSchema> = (data) => {
+    calculate(data);
+  };
 
   return (
     <section className={`${ss.form} section`}>
       <div className="container">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(customOnSubmit)}>
           <div className={ss.wrapper}>
             <ManualFertilizerCard
               title="Азот"

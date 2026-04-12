@@ -1,9 +1,17 @@
+import { useParams } from "react-router-dom";
 import { Clients, Crops, Fertilizers } from "../data/data";
 import type {
   IClientFormSchema,
   IManualFormSchema,
   IResults,
 } from "../types/minerals.types";
+
+const isManualForm = (
+  data: IClientFormSchema | IManualFormSchema,
+  clientKey?: string,
+): data is IManualFormSchema => {
+  return !clientKey;
+};
 
 export class Calculator {
   fertilizers = {
@@ -43,7 +51,7 @@ export class Calculator {
   };
 
   constructor(data: IClientFormSchema | IManualFormSchema, clientKey: string) {
-    console.log(data);
+    const isManual = isManualForm(data, clientKey);
 
     this.fertilizers.nitrogen = {
       ...this.getFertilizerData(data.nitrogen.fertilizer),
@@ -57,7 +65,7 @@ export class Calculator {
       ...this.getFertilizerData(data.potassium.fertilizer),
       price: data.potassium.price,
     };
-    if (data.type === "manual") {
+    if (isManual) {
       this.field = {
         ...data.field,
         harvest: data.field.harvest * 0.7,
@@ -66,7 +74,7 @@ export class Calculator {
         potassium: data.potassium.soilValue,
         phosphorus: data.phosphorus.soilValue,
       };
-    } else if (data.type === "client") {
+    } else {
       const fieldData = this.getFieldData(data.field.name, clientKey);
       this.field = {
         ...data.field,

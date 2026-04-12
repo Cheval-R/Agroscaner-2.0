@@ -11,18 +11,6 @@ import MineralFertilizerCalculator from "../../pages/Minerals/MineralFertilizerC
 import CornSilageHarvestCalculator from "../../pages/Corn/CornSilageHarvestCalculator";
 import NitrogenFeedingCalculator from "../../pages/Nitrogen/NitrogenFeedingCalculator";
 import type { ProgramKey } from "../types/global.types.ts";
-import type { IManualFormSchema } from "../../modules/Minerals/types/minerals.types.ts";
-import type { IClientFormSchema } from "../../modules/Minerals/components/ClientForm/ClientForm.types.ts";
-import {
-  Crops,
-  Fertilizers,
-  IClientFormConfig,
-} from "../../modules/Minerals/data/data.ts";
-
-interface ActiveSelection {
-  programKey: ProgramKey;
-  clientKey: ClientKey;
-}
 
 type ClientKey = string | null;
 
@@ -34,8 +22,6 @@ type ScreenConfig = {
 type Screens = Record<ProgramKey, ScreenConfig>;
 
 interface AppContextValue {
-  activeSelection: ActiveSelection;
-  setActiveSelection: Dispatch<SetStateAction<ActiveSelection>>;
   isMobileDisplay: boolean;
   screens: Screens;
 }
@@ -59,14 +45,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const isMobileDisplay = useMediaQuery(450);
 
-  const [activeSelection, setActiveSelection] = useState<ActiveSelection>({
-    programKey: "mineral-fertilizer-calculator",
-    clientKey: null, // 'nur'
-  });
-
   const value = {
-    activeSelection,
-    setActiveSelection,
     isMobileDisplay,
     screens,
   };

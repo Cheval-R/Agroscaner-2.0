@@ -12,12 +12,15 @@ import { useProgramContext } from "../../../../app/providers/AppContext";
 import type { IClientFormSchema } from "../../types/minerals.types";
 
 import ss from "./ClientForm.module.scss";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface Props {
   calculate: (data: IClientFormSchema) => void;
 }
 
 const ClientForm: React.FC<Props> = ({ calculate }) => {
+  const params = useParams();
+
   const { register, handleSubmit, control, formState, setValue } =
     useForm<IClientFormSchema>({
       defaultValues: {
@@ -38,27 +41,23 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
         },
       },
     });
-  const onSubmit: SubmitHandler<IClientFormSchema> = (data) => {
+  const customOnSubmit: SubmitHandler<IClientFormSchema> = (data) => {
     console.log(data);
     calculate(data);
   };
-  const { activeSelection, setActiveSelection } = useProgramContext();
 
-  const client = Clients.find(
-    (client) => client.key === activeSelection.clientKey,
-  );
+  const client = Clients.find((client) => client.key === params.clientKey);
   if (!client) {
-    setActiveSelection((prev) => ({ ...prev, clientKey: null }));
-    return <FallbackUI errorMessage="Клиент не найден" />;
+    <FallbackUI errorMessage="Клиент не найден" />;
+    return null;
   }
-
   return (
     <section className="section">
       <div className="container">
         <Bubble className={ss.title}>{client.label}</Bubble>
         <form
           className={ss.form}
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(customOnSubmit)}
         >
           <ClientFieldCard
             control={control}

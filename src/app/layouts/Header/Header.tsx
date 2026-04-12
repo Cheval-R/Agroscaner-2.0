@@ -5,12 +5,15 @@ import Burger from "../../../shared/UI/Burger/Burger";
 import ss from "./Header.module.scss";
 import { useProgramContext } from "../../providers/AppContext";
 import PROGRAM_LIST, { type IProgram } from "../../../data/programList";
-import Bubble, {
-  BubbleButton,
-  BubbleLink,
-} from "../../../shared/UI/Bubble/Bubble";
+import Bubble, { BubbleButton, BubbleLink, BubbleRouterLink } from "../../../shared/UI/Bubble/Bubble";
+import type { ProgramKey } from "../../types/global.types";
 
 import usePopover from "../../../shared/hooks/usePopover";
+import { useLocation, useNavigate } from "react-router-dom";
+
+const isProgramKey = (value: string): value is ProgramKey => {
+  return PROGRAM_LIST.some((p) => p.key === value);
+};
 
 const Header = () => {
   return (
@@ -26,7 +29,10 @@ const Header = () => {
 };
 
 const HeaderTop = () => {
-  const { activeSelection, screens } = useProgramContext();
+  const { screens } = useProgramContext();
+  const location = useLocation();
+  const path = location.pathname.split("/")[1];
+  const programKey = isProgramKey(path) ? path : undefined;
 
   return (
     <div className={ss.headerTop}>
@@ -43,7 +49,7 @@ const HeaderTop = () => {
         tag="h1"
         className={`${ss.headerTitle}`}
       >
-        {screens[activeSelection.programKey].label ?? "Ошибка"}
+        {programKey ? screens[programKey].label : "Ошибка"}
         {/* Калькулятор расчёта доз удобрений */}
       </Bubble>
       <BubbleLink
@@ -84,17 +90,9 @@ const HeaderContent = () => {
   );
 };
 
-const HeaderNav = ({
-  isBurgerOpen,
-  isMobileDisplay,
-}: {
-  isBurgerOpen?: boolean;
-  isMobileDisplay?: boolean;
-}) => {
+const HeaderNav = ({ isBurgerOpen, isMobileDisplay }: { isBurgerOpen?: boolean; isMobileDisplay?: boolean }) => {
   return (
-    <nav
-      className={`${isMobileDisplay ? ss.burgerNav : ""} ${isBurgerOpen ? ss.burgerNavOpen : ""}`}
-    >
+    <nav className={`${isMobileDisplay ? ss.burgerNav : ""} ${isBurgerOpen ? ss.burgerNavOpen : ""}`}>
       <ul className={ss.navList}>
         {PROGRAM_LIST.map((program) => {
           return (
@@ -110,22 +108,9 @@ const HeaderNav = ({
 };
 
 const NavItem = ({ item }: { item: IProgram }) => {
-  const { activeSelection, setActiveSelection } = useProgramContext();
-
   return (
     <li className={ss.navItem}>
-      {item?.innerList ? (
-        <Menu data={item} />
-      ) : (
-        <BubbleButton
-          isActive={item.key === activeSelection.programKey}
-          onClick={() => {
-            setActiveSelection({ programKey: item.key, clientKey: null });
-          }}
-        >
-          {item.label}
-        </BubbleButton>
-      )}
+      {item?.innerList ? <Menu data={item} /> : <BubbleRouterLink to={`${item.key}`}>{item.label}</BubbleRouterLink>}
     </li>
   );
 };

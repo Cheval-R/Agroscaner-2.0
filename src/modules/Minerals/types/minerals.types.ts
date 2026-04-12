@@ -1,27 +1,30 @@
 type TResultValue = { label: string; value: string };
 
+export interface INutrientResult {
+  physWeightPerGa: TResultValue;
+  pricePerGa: TResultValue;
+  physWeightPerField: TResultValue;
+  pricePerField: TResultValue;
+}
+
+export interface IFieldResult {
+  pricePerGa: TResultValue;
+  pricePerField: TResultValue;
+}
+
 export interface INutrientResultCard {
   key: "nitrogen" | "potassium" | "phosphorus";
   label: string;
-  results: {
-    physWeightPerGa: TResultValue;
-    pricePerGa: TResultValue;
-    physWeightPerField: TResultValue;
-    pricePerField: TResultValue;
-  };
+  results: INutrientResult;
 }
 export interface ITotalPriceResultCard {
   key: "total";
   label: string;
-  results: {
-    pricePerGa: TResultValue;
-    pricePerField: TResultValue;
-  };
+  results: IFieldResult;
 }
 export type TResultCard = INutrientResultCard | ITotalPriceResultCard;
 
 export interface IManualFormSchema {
-  type: "manual";
   nitrogen: {
     soilValue: number;
     fertilizer: string;
@@ -45,7 +48,6 @@ export interface IManualFormSchema {
 }
 
 export interface IClientFormSchema {
-  type: "client";
   field: {
     name: string;
     area: number;
