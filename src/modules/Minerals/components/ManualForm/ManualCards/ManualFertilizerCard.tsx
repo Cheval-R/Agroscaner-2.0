@@ -1,10 +1,4 @@
-import {
-  Controller,
-  type Control,
-  type FormState,
-  type UseFormRegister,
-  type UseFormSetValue,
-} from "react-hook-form";
+import { Controller, type Control, type FormState, type UseFormRegister, type UseFormSetValue } from "react-hook-form";
 import type { IManualFormSchema } from "../../../types/minerals.types";
 
 import Bubble, { BubbleInput } from "../../../../../shared/UI/Bubble/Bubble";
@@ -22,14 +16,7 @@ interface Props {
   setValue: UseFormSetValue<IManualFormSchema>;
 }
 
-const ManualFertilizerCard = ({
-  title,
-  cardKey,
-  register,
-  control,
-  formState,
-  setValue,
-}: Props) => {
+const ManualFertilizerCard = ({ title, cardKey, register, control, formState, setValue }: Props) => {
   return (
     <Bubble
       legend={title}
@@ -49,7 +36,7 @@ const ManualFertilizerCard = ({
         control={control}
         name={`${cardKey}.fertilizer` as const}
         rules={{ required: "Обязательное поле" }}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
               optionsList={Fertilizers}
@@ -57,12 +44,10 @@ const ManualFertilizerCard = ({
               legend="Удобрение"
               selectOption={(optionKey: string) => {
                 onChange(optionKey);
-                let fert = Fertilizers.find(
-                  (fertilizer) => fertilizer.key === optionKey,
-                );
+                let fert = Fertilizers.find((fertilizer) => fertilizer.key === optionKey);
                 setValue(`${cardKey}.price`, fert ? fert.price : 0);
               }}
-              errorMessage={formState.errors?.[cardKey]?.fertilizer?.message}
+              errorMessage={error?.message}
               onBlur={onBlur}
             />
           );

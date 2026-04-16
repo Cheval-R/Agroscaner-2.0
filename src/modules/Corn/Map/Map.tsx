@@ -10,9 +10,6 @@ import {
 import type { LngLat, YMapLocationRequest } from "@yandex/ymaps3-types";
 import ss from "./Map.module.scss";
 import type { MapEvent } from "@yandex/ymaps3-types/imperative/YMapFeature/types";
-import type { ICornFormSchema } from "../types/Corn.types";
-import type { UseFormSetValue } from "react-hook-form";
-
 const LOCATION: YMapLocationRequest = {
   center: [49.121358, 55.786949],
   zoom: 9,
@@ -20,14 +17,21 @@ const LOCATION: YMapLocationRequest = {
 
 interface Props {
   coordinates: { latitude: number; longitude: number };
-  setValue: UseFormSetValue<ICornFormSchema>;
+  onCoordinatesChange: (coordinates: {
+    latitude: string;
+    longitude: string;
+  }) => void;
 }
 
-const Map: React.FC<Props> = ({ coordinates, setValue }) => {
+//  TODO: Настроить изменение маркера сразу как изменились данные координат
+const Map: React.FC<Props> = ({ coordinates, onCoordinatesChange }) => {
   function setCoordinatesHandler(coordinates: LngLat) {
     const [longitude, latitude] = coordinates as [number, number];
-    setValue("latitude", latitude.toFixed(6), { shouldValidate: true });
-    setValue("longitude", longitude.toFixed(6), { shouldValidate: true });
+
+    onCoordinatesChange({
+      latitude: latitude.toFixed(6),
+      longitude: longitude.toFixed(6),
+    });
   }
 
   const ClickCallback = (object: any, event: MapEvent) => {
@@ -39,10 +43,13 @@ const Map: React.FC<Props> = ({ coordinates, setValue }) => {
         <YMapDefaultSchemeLayer />
         <YMapDefaultFeaturesLayer />
         <YMapMarker
-          coordinates={reactify.useDefault([Number(coordinates.longitude), Number(coordinates.latitude)] as LngLat, [
-            coordinates.latitude,
-            coordinates.longitude,
-          ])}
+          coordinates={reactify.useDefault(
+            [
+              Number(coordinates.longitude),
+              Number(coordinates.latitude),
+            ] as LngLat,
+            [coordinates.latitude, coordinates.longitude],
+          )}
           draggable={true}
           onDragEnd={(coordinates) => {
             setCoordinatesHandler(coordinates);

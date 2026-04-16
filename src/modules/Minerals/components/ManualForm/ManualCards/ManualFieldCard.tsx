@@ -1,11 +1,6 @@
 import React from "react";
 
-import {
-  type UseFormRegister,
-  type Control,
-  type FormState,
-  Controller,
-} from "react-hook-form";
+import { type UseFormRegister, type Control, type FormState, Controller } from "react-hook-form";
 import type { IManualFormSchema } from "../../../types/minerals.types";
 
 import Bubble, { BubbleInput } from "../../../../../shared/UI/Bubble/Bubble";
@@ -21,12 +16,7 @@ interface Props {
   formState: FormState<IManualFormSchema>;
 }
 
-const ManualFieldCard: React.FC<Props> = ({
-  title,
-  register,
-  control,
-  formState,
-}) => {
+const ManualFieldCard: React.FC<Props> = ({ title, register, control, formState }) => {
   return (
     <Bubble
       legend={title}
@@ -46,7 +36,7 @@ const ManualFieldCard: React.FC<Props> = ({
         control={control}
         name={"field.crop"}
         rules={{ required: "Обязательное поле" }}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
               optionsList={Crops}
@@ -55,7 +45,7 @@ const ManualFieldCard: React.FC<Props> = ({
               selectOption={(optionKey: string) => {
                 onChange(optionKey);
               }}
-              errorMessage={formState.errors?.field?.crop?.message}
+              errorMessage={error?.message}
               onBlur={onBlur}
             />
           );

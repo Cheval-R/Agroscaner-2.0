@@ -4,9 +4,6 @@ import Layout from "./layouts/Layout/Layout";
 import MineralFertilizerCalculator from "../pages/Minerals/MineralFertilizerCalculator";
 import CornSilageHarvestCalculator from "../pages/Corn/CornSilageHarvestCalculator";
 import NitrogenFeedingCalculator from "../pages/Nitrogen/NitrogenFeedingCalculator";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import type React from "react";
 
 export default function App() {
   return (

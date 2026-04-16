@@ -1,33 +1,37 @@
 import React from "react";
-import Bubble, { BubbleButton, BubbleInput } from "../../../shared/UI/Bubble/Bubble";
-
-import type { ICornFormSchema } from "../types/Corn.types";
-import {
-  Controller,
-  type Control,
-  type FormState,
-  type SubmitHandler,
-  type UseFormHandleSubmit,
-} from "react-hook-form";
-
-import ss from "./Form.module.scss";
+import Bubble, {
+  BubbleButton,
+  BubbleInput,
+} from "../../../shared/UI/Bubble/Bubble";
+import { Controller } from "react-hook-form";
 import CoordinateInput from "../CoordinateInput/CoordinateInput";
 import DateInput from "../DateInput/DateInput";
 
-const customOnSubmit: SubmitHandler<ICornFormSchema> = (data) => {
-  console.log(data);
-};
+import type { BaseSyntheticEvent } from "react";
+import type { ICornFormSchema } from "../types/Corn.types";
+import type { Control, FormState } from "react-hook-form";
+
+import ss from "./Form.module.scss";
 
 interface Props {
-  handleSubmit: UseFormHandleSubmit<ICornFormSchema>;
+  handleSubmit: (
+    e?: BaseSyntheticEvent<object, any, any> | undefined,
+  ) => Promise<void>;
   control: Control<ICornFormSchema>;
   formState: FormState<ICornFormSchema>;
 }
+const currentYear = new Date().getFullYear();
+const yearStr = String(currentYear);
+
+// Экранируем точку и подставляем текущий год
+const currentYearDatePattern = new RegExp(
+  `^(0[1-9]|[12][0-9]|3[01])\\.(0[1-9]|1[0-2])\\.(${yearStr})$`,
+);
 
 const Form: React.FC<Props> = ({ handleSubmit, control, formState }) => {
   return (
     <>
-      <form onSubmit={handleSubmit(customOnSubmit)}>
+      <form onSubmit={handleSubmit}>
         <Bubble
           legend="Расположение полей"
           legendSize="title"
@@ -37,12 +41,10 @@ const Form: React.FC<Props> = ({ handleSubmit, control, formState }) => {
           <CoordinateInput
             control={control}
             coordinateType="longitude"
-            formState={formState}
           />
           <CoordinateInput
             control={control}
             coordinateType="latitude"
-            formState={formState}
           />
         </Bubble>
         <Bubble
@@ -56,14 +58,13 @@ const Form: React.FC<Props> = ({ handleSubmit, control, formState }) => {
             control={control}
             rules={{
               required: { value: true, message: "Обязательное поле" },
+              pattern: {
+                value: currentYearDatePattern,
+                message: "Формат дд.мм.гггг",
+              },
             }}
             render={({ field }) => {
               return (
-                // <BubbleInput
-                //   {...field}
-                //   inputType="date"
-                //   errorMessage={formState.errors.sowingDate?.message}
-                // />
                 <DateInput
                   {...field}
                   formState={formState}
@@ -79,12 +80,12 @@ const Form: React.FC<Props> = ({ handleSubmit, control, formState }) => {
               min: { value: 0, message: "Минимально 0°C" },
               required: { value: true, message: "Обязательное поле" },
             }}
-            render={({ field }) => {
+            render={({ field, fieldState: { error } }) => {
               return (
                 <BubbleInput
                   legend="Базовая температура"
                   {...field}
-                  errorMessage={formState.errors.baseTemperature?.message}
+                  errorMessage={error?.message}
                 />
               );
             }}

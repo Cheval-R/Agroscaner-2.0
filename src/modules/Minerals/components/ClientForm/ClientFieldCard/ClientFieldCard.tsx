@@ -1,12 +1,6 @@
 import React from "react";
 import Bubble, { BubbleInput } from "../../../../../shared/UI/Bubble/Bubble";
-import {
-  type UseFormRegister,
-  type Control,
-  type FormState,
-  type UseFormSetValue,
-  Controller,
-} from "react-hook-form";
+import { type UseFormRegister, type Control, type FormState, type UseFormSetValue, Controller } from "react-hook-form";
 
 import Select from "../../../../../shared/UI/Select/Select";
 import { Crops } from "../../../data/data";
@@ -24,13 +18,7 @@ interface Props {
   clientData: IClient;
 }
 
-const ClientFieldCard: React.FC<Props> = ({
-  register,
-  control,
-  formState,
-  setValue,
-  clientData,
-}) => {
+const ClientFieldCard: React.FC<Props> = ({ register, control, formState, setValue, clientData }) => {
   const fieldList = clientData.fieldsList.map((field) => ({
     key: field.label,
     label: field.label,
@@ -46,19 +34,17 @@ const ClientFieldCard: React.FC<Props> = ({
         control={control}
         name="field.name"
         rules={{ required: "Обязательное поле" }}
-        render={({ field }) => {
+        render={({ field, fieldState: { error } }) => {
           return (
             <Select
               {...field}
               optionsList={fieldList}
               activeKey={field.value}
               legend="№ поля"
-              errorMessage={formState.errors.field?.name?.message}
+              errorMessage={error?.message}
               selectOption={(optionKey) => {
                 field.onChange(optionKey);
-                const area = fieldList.find(
-                  (field) => field.key === optionKey,
-                )?.area;
+                const area = fieldList.find((field) => field.key === optionKey)?.area;
                 setValue("field.area", area !== undefined ? area : 0);
               }}
             />
@@ -76,7 +62,7 @@ const ClientFieldCard: React.FC<Props> = ({
         control={control}
         name={"field.crop"}
         rules={{ required: "Обязательное поле" }}
-        render={({ field: { onChange, onBlur, value } }) => {
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
               optionsList={Crops}
@@ -84,7 +70,7 @@ const ClientFieldCard: React.FC<Props> = ({
               legend="Культура"
               onBlur={onBlur}
               selectOption={(optionKey) => onChange(optionKey)}
-              errorMessage={formState.errors?.field?.crop?.message}
+              errorMessage={error?.message}
             />
           );
         }}

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Controller,
-  type Control,
-  type FormState,
-  type SubmitHandler,
-  type UseFormHandleSubmit,
-} from "react-hook-form";
+import { Controller, type Control } from "react-hook-form";
 import { BubbleInput } from "../../../shared/UI/Bubble/Bubble";
 import type { ICornFormSchema } from "../types/Corn.types";
 
@@ -17,11 +11,10 @@ const LONGITUDE_PATTERN = /^-?((1?[0-7]?|[0-9])?[0-9](\.\d{1,6})?|180(\.0{1,6})?
 
 interface Props {
   control: Control<ICornFormSchema>;
-  formState: FormState<ICornFormSchema>;
   coordinateType: "latitude" | "longitude";
 }
 
-const CoordinateInput: React.FC<Props> = ({ control, formState, coordinateType }) => {
+const CoordinateInput: React.FC<Props> = ({ control, coordinateType }) => {
   return (
     <Controller
       name={coordinateType}
@@ -33,12 +26,12 @@ const CoordinateInput: React.FC<Props> = ({ control, formState, coordinateType }
         },
         required: { value: true, message: "Обязательное поле" },
       }}
-      render={({ field }) => {
+      render={({ field, fieldState: { error } }) => {
         return (
           <BubbleInput
             legend={`${coordinateType === "latitude" ? "Широта" : "Долгота"}`}
             {...field}
-            errorMessage={formState.errors[coordinateType]?.message}
+            errorMessage={error?.message}
           />
         );
       }}

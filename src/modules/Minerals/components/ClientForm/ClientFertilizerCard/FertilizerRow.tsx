@@ -1,13 +1,7 @@
 import React from "react";
-import {
-  type UseFormRegister,
-  type Control,
-  type FormState,
-  type UseFormSetValue,
-  Controller,
-} from "react-hook-form";
+import { type UseFormRegister, type Control, type FormState, type UseFormSetValue, Controller } from "react-hook-form";
 
-import type { IClientFormSchema } from "../ClientForm.types";
+import type { IClientFormSchema } from "../../../types/minerals.types";
 import { BubbleInput } from "../../../../../shared/UI/Bubble/Bubble";
 import Select from "../../../../../shared/UI/Select/Select";
 import { Fertilizers } from "../../../data/data";
@@ -40,13 +34,7 @@ const fertilizerMeta = {
   },
 } as const;
 
-const FertilizerRow: React.FC<Props> = ({
-  register,
-  control,
-  formState,
-  setValue,
-  fertilizerName,
-}) => {
+const FertilizerRow: React.FC<Props> = ({ register, control, formState, setValue, fertilizerName }) => {
   const labels = fertilizerMeta[fertilizerName];
   const rowInputsNames = {
     name: `${fertilizerName}.name`,
@@ -60,25 +48,18 @@ const FertilizerRow: React.FC<Props> = ({
           name={`${fertilizerName}.fertilizer`}
           control={control}
           rules={{ required: "Обязательное поле" }}
-          render={({ field }) => {
+          render={({ field, fieldState: { error } }) => {
             return (
               <Select
                 {...field}
                 optionsList={Fertilizers}
                 activeKey={field.value}
-                errorMessage={
-                  formState.errors?.[fertilizerName]?.fertilizer?.message
-                }
+                errorMessage={error?.message}
                 legend={labels.nameLegend}
                 selectOption={(optionKey) => {
                   field.onChange(optionKey);
-                  const fertilizerPrice = Fertilizers.find(
-                    (fertilizer) => fertilizer.key === optionKey,
-                  );
-                  setValue(
-                    `${fertilizerName}.price`,
-                    fertilizerPrice ? fertilizerPrice.price : 0,
-                  );
+                  const fertilizerPrice = Fertilizers.find((fertilizer) => fertilizer.key === optionKey);
+                  setValue(`${fertilizerName}.price`, fertilizerPrice ? fertilizerPrice.price : 0);
                 }}
               />
             );
