@@ -1,12 +1,13 @@
-import AirDatepicker from "air-datepicker";
-import "air-datepicker/air-datepicker.css";
-import "./DateInput.scss";
-import React, { useEffect, useRef } from "react";
-import { BubbleInput } from "../../../shared/UI/Bubble/Bubble";
+import 'air-datepicker/air-datepicker.css';
+import './DateInput.scss';
 
-import type { ICornFormSchema } from "../types/Corn.types";
-import { getTodayDate } from "../../../pages/Corn/CornSilageHarvestCalculator";
-import type { FormState } from "react-hook-form";
+import AirDatepicker from 'air-datepicker';
+import React, { useEffect, useRef } from 'react';
+import type { FormState } from 'react-hook-form';
+
+import { BubbleInput } from '../../../shared/UI/Bubble/Bubble';
+import type { ICornFormSchema } from '../types/Corn.types';
+import { getTodayDate } from '../functions/getTodayDate';
 
 interface Props {
   formState: FormState<ICornFormSchema>;

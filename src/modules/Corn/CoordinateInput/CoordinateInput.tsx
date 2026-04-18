@@ -1,5 +1,6 @@
 import React from "react";
-import { Controller, type Control } from "react-hook-form";
+import { type Control,Controller } from "react-hook-form";
+
 import { BubbleInput } from "../../../shared/UI/Bubble/Bubble";
 import type { ICornFormSchema } from "../types/Corn.types";
 

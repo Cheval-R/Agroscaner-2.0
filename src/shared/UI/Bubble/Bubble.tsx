@@ -1,6 +1,7 @@
 import React, { forwardRef, type JSX, type ReactNode } from "react";
+import { type LinkProps,useLocation, useNavigate } from "react-router-dom";
+
 import ss from "./Bubble.module.scss";
-import { useLocation, useNavigate, type LinkProps } from "react-router-dom";
 
 interface IBubbleProps {
   children?: ReactNode;

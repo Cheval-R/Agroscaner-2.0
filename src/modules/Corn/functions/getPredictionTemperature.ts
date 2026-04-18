@@ -1,4 +1,8 @@
-import type { ICornFormSchema } from "../types/Corn.types";
+import type { ICornFormSchema } from '../types/Corn.types';
+
+const START_DATE_TO_GET_HISTORICAL_DATE = 2010;
+
+const MAX_YEARS_PER_REQUEST = 5;
 
 interface IMeanTemperature {
   meanTemp: number[];
@@ -9,19 +13,23 @@ export type TForecastTemperature = { date: string; meanTemp: number }[];
 
 type TDate = [day: string, month: string, year: string];
 
-interface IHistoricalTemperatureData {
-  [year: string]: IMeanTemperature;
-}
+type IHistoricalTemperatureData = Record<string, IMeanTemperature>;
 
-export async function usePredictionTemperature(
+// ? TODO: Добавить кэширование данных. Если на пример пользователь ввел 10 мая потом 16 мая, то не нужно запрашивать еще раз данные, проще взять с кэша и пересчитать
+
+// ? TODO 2: Можно сделать график завязаный на выбранной дате, то есть, пользователь запрашивает первый раз и если он меняется то меняется начало графика, при этом запрос на сервер не делаем, но если выбрали более раннюю дату то ничего не поделать нужно делать новый запрос.
+
+// ? TODO 2.2: Либо выбранную дату сделать чисто UI моментом, а на самом деле запрашивать данные с марта либо начала года, чтобы везде можно было проверить, даже где зимой + 🤩
+
+// ? TODO 3 ПОправить обработку ошибок фетчей, сделать какую-то выпадашку чтобы понимать ошибку,
+
+export async function getPredictionTemperature(
   data: ICornFormSchema,
   baseTemp: number,
 ): Promise<TForecastTemperature> {
   const { startMonth, startDay } = getStartDatePrediction(data.sowingDate);
 
-  let actualTemperature: TForecastTemperature = sowingDateHasPassed(
-    data.sowingDate,
-  )
+  const actualTemperature: TForecastTemperature = sowingDateHasPassed(data.sowingDate)
     ? await fetchTemperatureFromSowingToToday(data)
     : [];
 
@@ -33,30 +41,41 @@ export async function usePredictionTemperature(
   );
 
   const predictedTemperature = forecastTemperature(historicalData);
-  // !Доделать
-  // const result:TForecastTemperature = [...actualTemperature, ...predictedTemperature]
 
-  // ? Возможно сделать сразу фильтр по значения что ниже базовой температуры, но нужно чтобы они вырезались только по краям, а не посреди года
+  const filteredPredictedTemperature = filterPredictedTemperatureByBaseTemp(
+    [...actualTemperature, ...predictedTemperature],
+    baseTemp,
+  );
 
-  return [...actualTemperature, ...predictedTemperature];
+  return filteredPredictedTemperature;
 }
 
-const getStartDatePrediction = (
-  sowingDate: string,
-): { startMonth: string; startDay: string } => {
-  let startMonth = String(new Date().getMonth() + 1).padStart(2, "0");
-  let startDay = String(new Date().getDate() + 1).padStart(2, "0");
+function filterPredictedTemperatureByBaseTemp(
+  predictedTemperature: TForecastTemperature,
+  baseTemp: number,
+): TForecastTemperature {
+  const startIndex = predictedTemperature.findIndex((elem) => Math.round(elem.meanTemp) > baseTemp);
+  const endIndex = predictedTemperature.findLastIndex(
+    (elem) => Math.round(elem.meanTemp) > baseTemp,
+  );
+
+  return predictedTemperature.slice(startIndex, endIndex);
+}
+
+function getStartDatePrediction(sowingDate: string): { startMonth: string; startDay: string } {
+  let startMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+  let startDay = String(new Date().getDate() + 1).padStart(2, '0');
 
   if (!sowingDateHasPassed(sowingDate)) {
-    const sowingDateArray = sowingDate.split(".");
+    const sowingDateArray = sowingDate.split('.');
     startMonth = sowingDateArray[1];
     startDay = sowingDateArray[0];
   }
   return { startMonth, startDay };
-};
+}
 
 const convertDateToApiFormat = (date: string): string => {
-  const dateArray: TDate = date.split(".") as TDate;
+  const dateArray: TDate = date.split('.') as TDate;
   return `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
 };
 
@@ -68,23 +87,22 @@ async function fetchHistoricalData(
 ): Promise<IHistoricalTemperatureData> {
   const endYear = new Date().getFullYear() - 1;
 
-  const results: { [year: string]: IMeanTemperature } = {};
+  const results: Record<string, IMeanTemperature> = {};
 
-  for (let year = 2000; year <= endYear; year++) {
+  for (let year = START_DATE_TO_GET_HISTORICAL_DATE; year <= endYear; ) {
     const startDate = `${year}-${startMonth}-${startDay}`;
     const endDate = `${year}-12-31`;
 
     const apiURL = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitude}&longitude=${longitude}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean`;
 
+    // ? TODO Описать групповые запросы на сервер по MAX_YEARS_PER_REQUEST
     results[year] = await fetchHistoricalDataByYear(apiURL);
   }
 
   return results;
 }
 
-async function fetchHistoricalDataByYear(
-  url: string,
-): Promise<IMeanTemperature> {
+async function fetchHistoricalDataByYear(url: string): Promise<IMeanTemperature> {
   return fetch(url)
     .then((response) => {
       if (!response.ok) {
@@ -94,7 +112,7 @@ async function fetchHistoricalDataByYear(
     })
     .then((weatherData) => {
       if (!weatherData.daily?.time || !weatherData.daily?.temperature_2m_mean) {
-        throw new Error("Invalid data structure");
+        throw new Error('Invalid data structure');
       }
       return {
         days: weatherData.daily.time,
@@ -107,9 +125,7 @@ async function fetchHistoricalDataByYear(
     });
 }
 
-function forecastTemperature(
-  data: IHistoricalTemperatureData,
-): TForecastTemperature {
+function forecastTemperature(data: IHistoricalTemperatureData): TForecastTemperature {
   let yearsLabels: number[] = Object.keys(data).map(Number);
 
   yearsLabels = yearsLabels.filter((year) => {
@@ -123,7 +139,7 @@ function forecastTemperature(
   const { days } = data[currentYear];
   const length = days.length;
 
-  let result: TForecastTemperature = [];
+  const result: TForecastTemperature = [];
 
   for (let i = 0; i < length; i++) {
     let numerator = 0;
@@ -149,14 +165,12 @@ function forecastTemperature(
       });
     }
 
-    if (numerator / denominator <= 0) continue;
-
     const newDate = new Date(days[i]);
     newDate.setFullYear(newDate.getFullYear() + 1);
 
     result.push({
       date: newDate.toLocaleDateString(),
-      meanTemp: numerator / denominator,
+      meanTemp: Math.round((numerator / denominator) * 10) / 10,
     });
   }
 
@@ -164,21 +178,17 @@ function forecastTemperature(
 }
 
 const sowingDateHasPassed = (date: string): boolean => {
-  const sowingDate = new Date(convertDateToApiFormat(date));
-  const todayDate = new Date();
-  console.log("sowing", date);
+  const sowingDate = new Date(convertDateToApiFormat(date)).getTime();
+  const todayDate = new Date().getTime();
 
-  console.log("today", todayDate.getTime());
-  console.log("nottoday", sowingDate.getTime());
-
-  return todayDate.getTime() > sowingDate.getTime();
+  return todayDate > sowingDate;
 };
 
 async function fetchTemperatureFromSowingToToday(
   data: ICornFormSchema,
 ): Promise<TForecastTemperature> {
   const startDate = convertDateToApiFormat(data.sowingDate);
-  const endDate = new Date().toISOString().split("T")[0];
+  const endDate = new Date().toISOString().split('T')[0];
   const apiURL = `https://archive-api.open-meteo.com/v1/archive?latitude=${data.latitude}&longitude=${data.longitude}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean`;
 
   return fetch(apiURL)

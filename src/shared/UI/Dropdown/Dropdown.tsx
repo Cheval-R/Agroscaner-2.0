@@ -1,7 +1,6 @@
-import type { Identifiers } from "../../../app/types/global.types";
-
-import Bubble, { BubbleButton } from "../Bubble/Bubble";
-import ss from "./Dropdown.module.scss";
+import type { Identifiers } from '../../../app/types/global.types';
+import Bubble, { BubbleButton } from '../Bubble/Bubble';
+import ss from './Dropdown.module.scss';
 
 interface Props {
   dropdownList: Identifiers[];
@@ -13,9 +12,9 @@ interface Props {
 const Dropdown = ({ dropdownList, isOpen, onClick, activeItemKey }: Props) => {
   return (
     <Bubble
-      tag={"ul"}
+      tag={'ul'}
       bubbleSize="sm"
-      className={`${ss.dropdown} ${isOpen ? ss.isOpen : ""}`}
+      className={`${ss.dropdown} ${isOpen ? ss.isOpen : ''}`}
     >
       {dropdownList.length > 0 ? (
         dropdownList.map((item) => {
@@ -25,7 +24,7 @@ const Dropdown = ({ dropdownList, isOpen, onClick, activeItemKey }: Props) => {
                 className={ss.item}
                 onClick={() => onClick(item)}
                 isActive={item.key === activeItemKey}
-                bubbleSize={"sm"}
+                bubbleSize={'sm'}
               >
                 {item.label}
               </BubbleButton>

@@ -1,15 +1,16 @@
-import React from "react";
+import type { LngLat, YMapLocationRequest } from '@yandex/ymaps3-types';
+import type { MapEvent } from '@yandex/ymaps3-types/imperative/YMapFeature/types';
+import React from 'react';
+
 import {
-  YMap,
-  YMapDefaultSchemeLayer,
-  YMapDefaultFeaturesLayer,
-  YMapMarker,
   reactify,
+  YMap,
+  YMapDefaultFeaturesLayer,
+  YMapDefaultSchemeLayer,
   YMapListener,
-} from "./lib/ymaps";
-import type { LngLat, YMapLocationRequest } from "@yandex/ymaps3-types";
-import ss from "./Map.module.scss";
-import type { MapEvent } from "@yandex/ymaps3-types/imperative/YMapFeature/types";
+  YMapMarker,
+} from './lib/ymaps';
+import ss from './Map.module.scss';
 const LOCATION: YMapLocationRequest = {
   center: [49.121358, 55.786949],
   zoom: 9,
@@ -17,10 +18,7 @@ const LOCATION: YMapLocationRequest = {
 
 interface Props {
   coordinates: { latitude: number; longitude: number };
-  onCoordinatesChange: (coordinates: {
-    latitude: string;
-    longitude: string;
-  }) => void;
+  onCoordinatesChange: (coordinates: { latitude: string; longitude: string }) => void;
 }
 
 //  TODO: Настроить изменение маркера сразу как изменились данные координат
@@ -38,16 +36,13 @@ const Map: React.FC<Props> = ({ coordinates, onCoordinatesChange }) => {
     setCoordinatesHandler(event.coordinates);
   };
   return ymaps3 ? (
-    <div style={{ width: "600px", height: "400px" }}>
+    <div style={{ width: '600px', height: '400px' }}>
       <YMap location={reactify.useDefault(LOCATION)}>
         <YMapDefaultSchemeLayer />
         <YMapDefaultFeaturesLayer />
         <YMapMarker
           coordinates={reactify.useDefault(
-            [
-              Number(coordinates.longitude),
-              Number(coordinates.latitude),
-            ] as LngLat,
+            [Number(coordinates.longitude), Number(coordinates.latitude)] as LngLat,
             [coordinates.latitude, coordinates.longitude],
           )}
           draggable={true}

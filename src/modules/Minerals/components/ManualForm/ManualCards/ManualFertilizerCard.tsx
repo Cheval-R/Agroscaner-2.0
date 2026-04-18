@@ -1,51 +1,69 @@
-import { Controller, type Control, type FormState, type UseFormRegister, type UseFormSetValue } from "react-hook-form";
-import type { IManualFormSchema } from "../../../types/minerals.types";
+import {
+  type Control,
+  Controller,
+  type FormState,
+  type UseFormRegister,
+  type UseFormSetValue,
+} from 'react-hook-form';
 
-import Bubble, { BubbleInput } from "../../../../../shared/UI/Bubble/Bubble";
-import Select from "../../../../../shared/UI/Select/Select";
-import { Fertilizers } from "../../../data/data";
-
-import ss from "./ManualCard.module.scss";
+import Bubble, { BubbleInput } from '../../../../../shared/UI/Bubble/Bubble';
+import Select from '../../../../../shared/UI/Select/Select';
+import type { IManualFormSchema } from '../../../types/minerals.types';
+import ss from './ManualCard.module.scss';
+import type { NPK } from '../../../types/types';
+import type { Identifiers } from '../../../../../app/types/global.types';
+import { Fertilizers } from '../../../data/fertilizersData';
 
 interface Props {
   title: string;
-  cardKey: "nitrogen" | "phosphorus" | "potassium";
+  fertilizerKey: NPK;
   register: UseFormRegister<IManualFormSchema>;
   control: Control<IManualFormSchema>;
   formState: FormState<IManualFormSchema>;
   setValue: UseFormSetValue<IManualFormSchema>;
+  fertilizerList: Identifiers[];
 }
 
-const ManualFertilizerCard = ({ title, cardKey, register, control, formState, setValue }: Props) => {
+const ManualFertilizerCard = ({
+  title,
+  fertilizerKey,
+  fertilizerList,
+  register,
+  control,
+  formState,
+  setValue,
+}: Props) => {
+  const getFertilizerPrice = (key: string): number | undefined => {
+    return Fertilizers.find((fertilizer) => fertilizer.key === key)?.price;
+  };
   return (
-    <Bubble
-      legend={title}
-      className={ss.card}
-    >
+    <Bubble legend={title} className={ss.card}>
       <BubbleInput
         legend="В почве, мг/кг"
         inputType="number"
-        {...register(`${cardKey}.soilValue`, {
-          required: "Обязательное поле",
-          min: { value: 0, message: "Положительное число" },
+        {...register(`${fertilizerKey}.soilValue`, {
+          required: 'Обязательное поле',
+          min: { value: 0, message: 'Положительное число' },
           valueAsNumber: true,
         })}
-        errorMessage={formState.errors?.[cardKey]?.soilValue?.message}
+        errorMessage={formState.errors?.[fertilizerKey]?.soilValue?.message}
       />
       <Controller
         control={control}
-        name={`${cardKey}.fertilizer` as const}
-        rules={{ required: "Обязательное поле" }}
+        name={`${fertilizerKey}.fertilizer` as const}
+        rules={{ required: 'Обязательное поле' }}
         render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
-              optionsList={Fertilizers}
+              optionsList={fertilizerList}
               activeKey={value}
               legend="Удобрение"
               selectOption={(optionKey: string) => {
                 onChange(optionKey);
-                let fert = Fertilizers.find((fertilizer) => fertilizer.key === optionKey);
-                setValue(`${cardKey}.price`, fert ? fert.price : 0);
+                const price = getFertilizerPrice(optionKey);
+                if (price) {
+                  setValue(`${fertilizerKey}.price`, price);
+                }
               }}
               errorMessage={error?.message}
               onBlur={onBlur}
@@ -56,12 +74,12 @@ const ManualFertilizerCard = ({ title, cardKey, register, control, formState, se
       <BubbleInput
         legend="Стоимость"
         inputType="number"
-        {...register(`${cardKey}.price`, {
-          required: "Обязательное поле",
-          min: { value: 0, message: "Положительное число" },
+        {...register(`${fertilizerKey}.price`, {
+          required: 'Обязательное поле',
+          min: { value: 0, message: 'Положительное число' },
           valueAsNumber: true,
         })}
-        errorMessage={formState.errors?.[cardKey]?.price?.message}
+        errorMessage={formState.errors?.[fertilizerKey]?.price?.message}
       />
     </Bubble>
   );

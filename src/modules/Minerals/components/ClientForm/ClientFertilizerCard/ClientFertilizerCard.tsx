@@ -1,16 +1,11 @@
-import React from "react";
-import Bubble from "../../../../../shared/UI/Bubble/Bubble";
-import type {
-  UseFormRegister,
-  Control,
-  FormState,
-  UseFormSetValue,
-} from "react-hook-form";
-import FertilizerRow from "./FertilizerRow";
+import React from 'react';
+import type { Control, FormState, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
-import type { IClientFormSchema } from "../../../types/minerals.types";
-
-import ss from "../ClientForm.module.scss";
+import Bubble from '../../../../../shared/UI/Bubble/Bubble';
+import type { IClientFormSchema } from '../../../types/minerals.types';
+import ss from '../ClientForm.module.scss';
+import FertilizerRow from './FertilizerRow';
+import { NutrientConfig } from '../../../data/fertilizersData';
 
 interface Props {
   register: UseFormRegister<IClientFormSchema>;
@@ -26,20 +21,16 @@ const ClientFertilizerCard: React.FC<Props> = (props) => {
       legendSize="title"
       className={`${ss.card} ${ss.fertilizerCard}`}
     >
-      <FertilizerRow
-        {...props}
-        fertilizerName="nitrogen"
-      />
-
-      <FertilizerRow
-        {...props}
-        fertilizerName="phosphorus"
-      />
-
-      <FertilizerRow
-        {...props}
-        fertilizerName="potassium"
-      />
+      {NutrientConfig.map((nutrient) => {
+        return (
+          <FertilizerRow
+            key={nutrient.key}
+            {...props}
+            fertilizerKey={nutrient.key}
+            fertilizerLabel={nutrient.label}
+          />
+        );
+      })}
     </Bubble>
   );
 };

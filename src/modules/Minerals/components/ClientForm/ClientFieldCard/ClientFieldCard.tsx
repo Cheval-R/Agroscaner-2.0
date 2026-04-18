@@ -1,14 +1,18 @@
-import React from "react";
-import Bubble, { BubbleInput } from "../../../../../shared/UI/Bubble/Bubble";
-import { type UseFormRegister, type Control, type FormState, type UseFormSetValue, Controller } from "react-hook-form";
+import React from 'react';
+import {
+  type Control,
+  Controller,
+  type FormState,
+  type UseFormRegister,
+  type UseFormSetValue,
+} from 'react-hook-form';
 
-import Select from "../../../../../shared/UI/Select/Select";
-import { Crops } from "../../../data/data";
-import type { IClient } from "../../../data/types";
-
-import type { IClientFormSchema } from "../../../types/minerals.types";
-
-import ss from "../ClientForm.module.scss";
+import Bubble, { BubbleInput } from '../../../../../shared/UI/Bubble/Bubble';
+import Select from '../../../../../shared/UI/Select/Select';
+import type { IClient } from '../../../types/types';
+import type { IClientFormSchema } from '../../../types/minerals.types';
+import ss from '../ClientForm.module.scss';
+import { Crops } from '../../../data/cropData';
 
 interface Props {
   register: UseFormRegister<IClientFormSchema>;
@@ -18,7 +22,13 @@ interface Props {
   clientData: IClient;
 }
 
-const ClientFieldCard: React.FC<Props> = ({ register, control, formState, setValue, clientData }) => {
+const ClientFieldCard: React.FC<Props> = ({
+  register,
+  control,
+  formState,
+  setValue,
+  clientData,
+}) => {
   const fieldList = clientData.fieldsList.map((field) => ({
     key: field.label,
     label: field.label,
@@ -33,7 +43,7 @@ const ClientFieldCard: React.FC<Props> = ({ register, control, formState, setVal
       <Controller
         control={control}
         name="field.name"
-        rules={{ required: "Обязательное поле" }}
+        rules={{ required: 'Обязательное поле' }}
         render={({ field, fieldState: { error } }) => {
           return (
             <Select
@@ -45,23 +55,23 @@ const ClientFieldCard: React.FC<Props> = ({ register, control, formState, setVal
               selectOption={(optionKey) => {
                 field.onChange(optionKey);
                 const area = fieldList.find((field) => field.key === optionKey)?.area;
-                setValue("field.area", area !== undefined ? area : 0);
+                setValue('field.area', area !== undefined ? area : 0);
               }}
             />
           );
         }}
       />
       <BubbleInput
-        {...register("field.area", {
-          required: "Обязательное поле",
+        {...register('field.area', {
+          required: 'Обязательное поле',
         })}
         legend="Площадь поля"
         errorMessage={formState.errors?.field?.area?.message}
       />
       <Controller
         control={control}
-        name={"field.crop"}
-        rules={{ required: "Обязательное поле" }}
+        name={'field.crop'}
+        rules={{ required: 'Обязательное поле' }}
         render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => {
           return (
             <Select
@@ -76,7 +86,7 @@ const ClientFieldCard: React.FC<Props> = ({ register, control, formState, setVal
         }}
       />
       <BubbleInput
-        {...register("field.harvest", { required: "Обязательное поле" })}
+        {...register('field.harvest', { required: 'Обязательное поле' })}
         legend="Урожай"
         errorMessage={formState.errors?.field?.harvest?.message}
       />

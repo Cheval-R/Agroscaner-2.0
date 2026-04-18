@@ -32,11 +32,6 @@
   padding: clamp(18px, 2vw, 24px);
 }
 
-// .card > * {
-//   width: 100%;
-//   min-width: 0;
-// }
-
 .fieldCard,
 .fertilizerCard {
   grid-auto-rows: minmax(0, auto);

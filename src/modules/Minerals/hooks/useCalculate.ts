@@ -1,10 +1,7 @@
-import { useParams } from "react-router-dom";
-import { Clients, Crops, Fertilizers } from "../data/data";
-import type {
-  IClientFormSchema,
-  IManualFormSchema,
-  IResults,
-} from "../types/minerals.types";
+import { Clients } from '../data/clientsData';
+import { Crops } from '../data/cropData';
+import { Fertilizers } from '../data/fertilizersData';
+import type { IClientFormSchema, IManualFormSchema, IResults } from '../types/minerals.types';
 
 const isManualForm = (
   data: IClientFormSchema | IManualFormSchema,
@@ -116,9 +113,9 @@ export class Calculator {
     const fieldPhosphorus = this.field.phosphorus;
     const fieldPotassium = this.field.potassium;
 
-    let nitrogen = fieldNitrogen < 2.9 ? 1 : fieldNitrogen <= 6.2 ? 0.75 : 0.6;
+    const nitrogen = fieldNitrogen < 2.9 ? 1 : fieldNitrogen <= 6.2 ? 0.75 : 0.6;
 
-    let phosphorus =
+    const phosphorus =
       fieldPhosphorus < 20
         ? 1.3
         : fieldPhosphorus < 25
@@ -131,7 +128,7 @@ export class Calculator {
                 ? 0.9
                 : 0.7;
 
-    let potassium =
+    const potassium =
       fieldPotassium < 6
         ? 1.5
         : fieldPotassium < 7.5
@@ -184,36 +181,33 @@ export class Calculator {
     const correction = { nitrogen: 1, phosphorus: 1, potassium: 0.8 };
     const coefficients = this.getNPKCoefficients();
 
-    const fertilizerKeys: ["phosphorus", "nitrogen", "potassium"] = [
-      "phosphorus",
-      "nitrogen",
-      "potassium",
+    const fertilizerKeys: ['phosphorus', 'nitrogen', 'potassium'] = [
+      'phosphorus',
+      'nitrogen',
+      'potassium',
     ];
     fertilizerKeys.forEach((key) => {
       let dose = coefficients[key] * this.field.harvest * this.field.crop[key];
 
-      if (key !== "phosphorus") {
+      if (key !== 'phosphorus') {
         dose -=
-          ((this.fertilizers.phosphorus[key] ?? 0) *
-            (result.phosphorus.physWeightPerGa ?? 0)) /
+          ((this.fertilizers.phosphorus[key] ?? 0) * (result.phosphorus.physWeightPerGa ?? 0)) /
           100;
       }
       result[key].physWeightPerGa =
-        Math.round(
-          (((dose * 100) / this.fertilizers[key][key]) * correction[key]) / 5,
-        ) * 5;
+        Math.round((((dose * 100) / this.fertilizers[key][key]) * correction[key]) / 5) * 5;
       result[key].physWeightPerField = Math.round(
         (result[key].physWeightPerGa / 1000) * this.field.area,
       );
     });
-    console.log("result1", result);
+    console.log('result1', result);
     return result;
   }
   calculatePrice(result: IResults): IResults {
-    const fertilizerKeys: ["phosphorus", "nitrogen", "potassium"] = [
-      "phosphorus",
-      "nitrogen",
-      "potassium",
+    const fertilizerKeys: ['phosphorus', 'nitrogen', 'potassium'] = [
+      'phosphorus',
+      'nitrogen',
+      'potassium',
     ];
 
     fertilizerKeys.forEach((key) => {
@@ -224,9 +218,7 @@ export class Calculator {
     });
 
     result.field.pricePerGa =
-      result.nitrogen.pricePerGa +
-      result.phosphorus.pricePerGa +
-      result.potassium.pricePerGa;
+      result.nitrogen.pricePerGa + result.phosphorus.pricePerGa + result.potassium.pricePerGa;
 
     result.field.pricePerField =
       result.nitrogen.pricePerField +
@@ -236,11 +228,11 @@ export class Calculator {
   }
 
   calculate(): IResults {
-    console.log("input", this);
+    console.log('input', this);
 
     let result: IResults = this.createEmptyResult();
     result = this.calculateDose(result);
-    console.log("result1", result);
+    console.log('result1', result);
     result = this.calculatePrice(result);
 
     return result;

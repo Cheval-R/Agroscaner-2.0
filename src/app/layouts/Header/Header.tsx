@@ -1,18 +1,21 @@
-import Menu from "../../../shared/UI/Menu/Menu";
-import logoTahs from "../../../shared/assets/logo-tahs.png";
-import logoLab from "../../../shared/assets/logo-lab.png";
-import Burger from "../../../shared/UI/Burger/Burger";
-import ss from "./Header.module.scss";
-import { useProgramContext } from "../../providers/AppContext";
-import PROGRAM_LIST, { type IProgram } from "../../../data/programList";
-import Bubble, { BubbleButton, BubbleLink, BubbleRouterLink } from "../../../shared/UI/Bubble/Bubble";
-import type { ProgramKey } from "../../types/global.types";
+import { useLocation } from 'react-router-dom';
 
-import usePopover from "../../../shared/hooks/usePopover";
-import { useLocation, useNavigate } from "react-router-dom";
+import { PROGRAM_LIST, type IProgram } from '../../../data/programList';
+import logoLab from '../../../shared/assets/logo-lab.png';
+import logoTahs from '../../../shared/assets/logo-tahs.png';
+import usePopover from '../../../shared/hooks/usePopover';
+import Bubble, { BubbleLink, BubbleRouterLink } from '../../../shared/UI/Bubble/Bubble';
+import Burger from '../../../shared/UI/Burger/Burger';
+import Menu from '../../../shared/UI/Menu/Menu';
+import { useProgramContext } from '../../providers/AppContext';
+import ss from './Header.module.scss';
+import { Clients } from '../../../modules/Minerals/data/clientsData';
+import type { Identifiers } from '../../types/global.types';
 
-const isProgramKey = (value: string): value is ProgramKey => {
-  return PROGRAM_LIST.some((p) => p.key === value);
+const getProgramLabel = (value: string): string => {
+  const program = PROGRAM_LIST.find((p) => p.key === value);
+  if (!program) return 'Калькулятор';
+  return program.label;
 };
 
 const Header = () => {
@@ -29,10 +32,9 @@ const Header = () => {
 };
 
 const HeaderTop = () => {
-  const { screens } = useProgramContext();
   const location = useLocation();
-  const path = location.pathname.split("/")[1];
-  const programKey = isProgramKey(path) ? path : undefined;
+  const path = location.pathname.split('/')[1];
+  const programLabel = getProgramLabel(path);
 
   return (
     <div className={ss.headerTop}>
@@ -49,7 +51,7 @@ const HeaderTop = () => {
         tag="h1"
         className={`${ss.headerTitle}`}
       >
-        {programKey ? screens[programKey].label : "Ошибка"}
+        {programLabel}
         {/* Калькулятор расчёта доз удобрений */}
       </Bubble>
       <BubbleLink
@@ -89,19 +91,38 @@ const HeaderContent = () => {
     <HeaderNav />
   );
 };
-
-const HeaderNav = ({ isBurgerOpen, isMobileDisplay }: { isBurgerOpen?: boolean; isMobileDisplay?: boolean }) => {
+const HeaderNav = ({
+  isBurgerOpen,
+  isMobileDisplay,
+}: {
+  isBurgerOpen?: boolean;
+  isMobileDisplay?: boolean;
+}) => {
+  const clientList: Identifiers[] = Clients.map((client) => {
+    return { key: client.key, label: client.label };
+  });
   return (
-    <nav className={`${isMobileDisplay ? ss.burgerNav : ""} ${isBurgerOpen ? ss.burgerNavOpen : ""}`}>
+    <nav
+      className={`${isMobileDisplay ? ss.burgerNav : ''} ${isBurgerOpen ? ss.burgerNavOpen : ''}`}
+    >
       <ul className={ss.navList}>
-        {PROGRAM_LIST.map((program) => {
-          return (
-            <NavItem
-              key={program.key}
-              item={program}
-            />
-          );
-        })}
+        <li className={ss.navItem}>
+          <Menu
+            programKey="mineral-fertilizer-calculator"
+            label="Расчёт минеральных удобрений"
+            optionsList={clientList}
+          />
+        </li>
+        <li className={ss.navItem}>
+          <BubbleRouterLink to={'corn-silage-harvest-calculator'}>
+            Расчёт сроков уборки кукурузы
+          </BubbleRouterLink>
+        </li>
+        <li className={ss.navItem}>
+          <BubbleRouterLink to={'nitrogen-feeding-calculator'}>
+            Расчёт азотной подкормки
+          </BubbleRouterLink>
+        </li>
       </ul>
     </nav>
   );
@@ -110,7 +131,7 @@ const HeaderNav = ({ isBurgerOpen, isMobileDisplay }: { isBurgerOpen?: boolean; 
 const NavItem = ({ item }: { item: IProgram }) => {
   return (
     <li className={ss.navItem}>
-      {item?.innerList ? <Menu data={item} /> : <BubbleRouterLink to={`${item.key}`}>{item.label}</BubbleRouterLink>}
+      <BubbleRouterLink to={`${item.key}`}>{item.label}</BubbleRouterLink>
     </li>
   );
 };

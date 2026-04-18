@@ -1,8 +1,6 @@
-import type { TResultCard } from "../../types/minerals.types";
-
-import Bubble from "../../../../shared/UI/Bubble/Bubble";
-
-import ss from "./Result.module.scss";
+import Bubble from '../../../../shared/UI/Bubble/Bubble';
+import type { TResultCard } from '../../types/minerals.types';
+import ss from './Result.module.scss';
 
 const Result = ({ results }: { results: TResultCard[] }) => {
   return (
@@ -11,20 +9,20 @@ const Result = ({ results }: { results: TResultCard[] }) => {
         <div className={`${ss.wrapper}`}>
           {results.map((card) => {
             let resultItems: any[];
-            if (card.key === "total") {
+            if (card.key === 'total') {
               resultItems = [
-                { key: "pricePerField", ...card.results.pricePerField },
-                { key: "pricePerGa", ...card.results.pricePerGa },
+                { key: 'pricePerField', ...card.results.pricePerField },
+                { key: 'pricePerGa', ...card.results.pricePerGa },
               ];
             } else {
               resultItems = [
                 {
-                  key: "physWeightPerField",
+                  key: 'physWeightPerField',
                   ...card.results.physWeightPerField,
                 },
-                { key: "physWeightPerGa", ...card.results.physWeightPerGa },
-                { key: "pricePerField", ...card.results.pricePerField },
-                { key: "pricePerGa", ...card.results.pricePerGa },
+                { key: 'physWeightPerGa', ...card.results.physWeightPerGa },
+                { key: 'pricePerField', ...card.results.pricePerField },
+                { key: 'pricePerGa', ...card.results.pricePerGa },
               ];
             }
             return (

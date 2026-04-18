@@ -1,53 +1,48 @@
-import React from "react";
-import { type UseFormRegister, type Control, type FormState, type UseFormSetValue, Controller } from "react-hook-form";
+import React from 'react';
+import {
+  type Control,
+  Controller,
+  type FormState,
+  type UseFormRegister,
+  type UseFormSetValue,
+} from 'react-hook-form';
 
-import type { IClientFormSchema } from "../../../types/minerals.types";
-import { BubbleInput } from "../../../../../shared/UI/Bubble/Bubble";
-import Select from "../../../../../shared/UI/Select/Select";
-import { Fertilizers } from "../../../data/data";
-
-import ss from "../ClientForm.module.scss";
+import { BubbleInput } from '../../../../../shared/UI/Bubble/Bubble';
+import Select from '../../../../../shared/UI/Select/Select';
+import { Fertilizers } from '../../../data/fertilizersData';
+import type { IClientFormSchema } from '../../../types/minerals.types';
+import ss from '../ClientForm.module.scss';
+import type { NPK } from '../../../types/types';
 
 interface Props {
   register: UseFormRegister<IClientFormSchema>;
   control: Control<IClientFormSchema>;
   formState: FormState<IClientFormSchema>;
   setValue: UseFormSetValue<IClientFormSchema>;
-  fertilizerName: "nitrogen" | "phosphorus" | "potassium";
+  fertilizerKey: NPK;
+  fertilizerLabel: string;
 }
 
-const fertilizerMeta = {
-  nitrogen: {
-    title: "Азот",
-    nameLegend: "Удобрение",
-    priceLegend: "Цена, ₽/т",
-  },
-  phosphorus: {
-    title: "Фосфор",
-    nameLegend: "Удобрение",
-    priceLegend: "Цена, ₽/т",
-  },
-  potassium: {
-    title: "Калий",
-    nameLegend: "Удобрение",
-    priceLegend: "Цена, ₽/т",
-  },
-} as const;
-
-const FertilizerRow: React.FC<Props> = ({ register, control, formState, setValue, fertilizerName }) => {
-  const labels = fertilizerMeta[fertilizerName];
+const FertilizerRow: React.FC<Props> = ({
+  register,
+  control,
+  formState,
+  setValue,
+  fertilizerKey,
+  fertilizerLabel,
+}) => {
   const rowInputsNames = {
-    name: `${fertilizerName}.name`,
-    price: `${fertilizerName}.price`,
+    name: `${fertilizerKey}.name`,
+    price: `${fertilizerKey}.price`,
   } as const;
   return (
     <div className={ss.fertilizerSection}>
-      <span className={ss.rowTitle}>{labels.title}</span>
+      <span className={ss.rowTitle}>{fertilizerLabel}</span>
       <div className={ss.cardRow}>
         <Controller
-          name={`${fertilizerName}.fertilizer`}
+          name={`${fertilizerKey}.fertilizer`}
           control={control}
-          rules={{ required: "Обязательное поле" }}
+          rules={{ required: 'Обязательное поле' }}
           render={({ field, fieldState: { error } }) => {
             return (
               <Select
@@ -55,20 +50,22 @@ const FertilizerRow: React.FC<Props> = ({ register, control, formState, setValue
                 optionsList={Fertilizers}
                 activeKey={field.value}
                 errorMessage={error?.message}
-                legend={labels.nameLegend}
+                legend={fertilizerLabel}
                 selectOption={(optionKey) => {
                   field.onChange(optionKey);
-                  const fertilizerPrice = Fertilizers.find((fertilizer) => fertilizer.key === optionKey);
-                  setValue(`${fertilizerName}.price`, fertilizerPrice ? fertilizerPrice.price : 0);
+                  const fertilizerPrice = Fertilizers.find(
+                    (fertilizer) => fertilizer.key === optionKey,
+                  );
+                  setValue(`${fertilizerKey}.price`, fertilizerPrice ? fertilizerPrice.price : 0);
                 }}
               />
             );
           }}
         />
         <BubbleInput
-          legend={labels.priceLegend}
-          {...register(rowInputsNames.price, { required: "Обязательное поле" })}
-          errorMessage={formState.errors?.[fertilizerName]?.price?.message}
+          legend="Цена, ₽/т"
+          {...register(rowInputsNames.price, { required: 'Обязательное поле' })}
+          errorMessage={formState.errors?.[fertilizerKey]?.price?.message}
         />
       </div>
     </div>

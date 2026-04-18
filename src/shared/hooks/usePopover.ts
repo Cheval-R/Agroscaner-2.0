@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import { useDeviceType } from "./useDeviceType";
 
 const usePopover = (whenClose?: () => void) => {

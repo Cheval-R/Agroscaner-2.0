@@ -1,4 +1,4 @@
-type TResultValue = { label: string; value: string };
+interface TResultValue { label: string; value: string }
 
 export interface INutrientResult {
   physWeightPerGa: TResultValue;

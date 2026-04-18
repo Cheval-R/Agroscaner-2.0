@@ -3,6 +3,6 @@ export interface Identifiers {
   label: string;
 }
 export type ProgramKey =
-  | "mineral-fertilizer-calculator"
-  | "corn-silage-harvest-calculator"
-  | "nitrogen-feeding-calculator";
+  | 'mineral-fertilizer-calculator'
+  | 'corn-silage-harvest-calculator'
+  | 'nitrogen-feeding-calculator';

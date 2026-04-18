@@ -1,18 +1,15 @@
-import React from "react";
+import React from 'react';
+import { type SubmitHandler, useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 
-import Bubble, { BubbleButton } from "../../../../shared/UI/Bubble/Bubble";
-import { Clients } from "../../data/data";
-import FallbackUI from "../../../../app/layouts/FallbackUI/FallbackUI";
-import ClientFieldCard from "./ClientFieldCard/ClientFieldCard";
-import ClientFertilizerCard from "./ClientFertilizerCard/ClientFertilizerCard";
+import FallbackUI from '../../../../app/layouts/FallbackUI/FallbackUI';
+import Bubble, { BubbleButton } from '../../../../shared/UI/Bubble/Bubble';
 
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { useProgramContext } from "../../../../app/providers/AppContext";
-
-import type { IClientFormSchema } from "../../types/minerals.types";
-
-import ss from "./ClientForm.module.scss";
-import { useNavigate, useParams } from "react-router-dom";
+import type { IClientFormSchema } from '../../types/minerals.types';
+import ClientFertilizerCard from './ClientFertilizerCard/ClientFertilizerCard';
+import ClientFieldCard from './ClientFieldCard/ClientFieldCard';
+import ss from './ClientForm.module.scss';
+import { Clients } from '../../data/clientsData';
 
 interface Props {
   calculate: (data: IClientFormSchema) => void;
@@ -21,26 +18,25 @@ interface Props {
 const ClientForm: React.FC<Props> = ({ calculate }) => {
   const params = useParams();
 
-  const { register, handleSubmit, control, formState, setValue } =
-    useForm<IClientFormSchema>({
-      defaultValues: {
-        field: {
-          area: 100,
-          crop: "pshenitsa-yarovaya",
-          harvest: 100,
-          name: "2",
-        },
-        nitrogen: {
-          price: 20.655,
-          fertilizer: "ammiachnaya-selitra",
-        },
-        potassium: { price: 23, fertilizer: "kaliy-hloristyy" },
-        phosphorus: {
-          price: 52,
-          fertilizer: "ammofos-52",
-        },
+  const { register, handleSubmit, control, formState, setValue } = useForm<IClientFormSchema>({
+    defaultValues: {
+      field: {
+        area: 100,
+        crop: 'pshenitsa-yarovaya',
+        harvest: 100,
+        name: '2',
       },
-    });
+      nitrogen: {
+        price: 20.655,
+        fertilizer: 'ammiachnaya-selitra',
+      },
+      potassium: { price: 23, fertilizer: 'kaliy-hloristyy' },
+      phosphorus: {
+        price: 52,
+        fertilizer: 'ammofos-52',
+      },
+    },
+  });
   const customOnSubmit: SubmitHandler<IClientFormSchema> = (data) => {
     console.log(data);
     calculate(data);
@@ -55,10 +51,7 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
     <section className="section">
       <div className="container">
         <Bubble className={ss.title}>{client.label}</Bubble>
-        <form
-          className={ss.form}
-          onSubmit={handleSubmit(customOnSubmit)}
-        >
+        <form className={ss.form} onSubmit={handleSubmit(customOnSubmit)}>
           <ClientFieldCard
             control={control}
             formState={formState}
@@ -72,10 +65,7 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
             register={register}
             setValue={setValue}
           />
-          <BubbleButton
-            type="submit"
-            className={ss.expandFullWidth}
-          >
+          <BubbleButton type="submit" className={ss.expandFullWidth}>
             Рассчитать
           </BubbleButton>
         </form>

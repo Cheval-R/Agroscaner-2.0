@@ -1,9 +1,11 @@
-import { Route, Routes } from "react-router-dom";
-import "./styles";
-import Layout from "./layouts/Layout/Layout";
-import MineralFertilizerCalculator from "../pages/Minerals/MineralFertilizerCalculator";
-import CornSilageHarvestCalculator from "../pages/Corn/CornSilageHarvestCalculator";
-import NitrogenFeedingCalculator from "../pages/Nitrogen/NitrogenFeedingCalculator";
+import './styles';
+
+import { Route, Routes } from 'react-router-dom';
+
+import CornSilageHarvestCalculator from '../pages/Corn/CornSilageHarvestCalculator';
+import MineralFertilizerCalculator from '../pages/Minerals/MineralFertilizerCalculator';
+import NitrogenFeedingCalculator from '../pages/Nitrogen/NitrogenFeedingCalculator';
+import Layout from './layouts/Layout/Layout';
 
 export default function App() {
   return (
