@@ -1,11 +1,8 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from 'react-router-dom';
 
-import Header from "../Header/Header";
+import Header from '../Header/Header';
 
-interface Props {}
-
-const Layout: React.FC<Props> = ({}) => {
+const Layout = () => {
   return (
     <>
       <Header />

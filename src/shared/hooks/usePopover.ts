@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import { useDeviceType } from "./useDeviceType";
+import { useDeviceType } from './useDeviceType';
 
 const usePopover = (whenClose?: () => void) => {
   const timerIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -20,12 +20,12 @@ const usePopover = (whenClose?: () => void) => {
         whenClose?.();
       }
     };
-    document.addEventListener("pointerdown", clickOutOfSelect);
+    document.addEventListener('pointerdown', clickOutOfSelect);
     return () => {
       if (timerIdRef.current) clearTimeout(timerIdRef.current);
-      document.removeEventListener("pointerdown", clickOutOfSelect);
+      document.removeEventListener('pointerdown', clickOutOfSelect);
     };
-  }, []);
+  }, [whenClose]);
 
   const onHoverHandler = () => {
     if (caps.canHover) {

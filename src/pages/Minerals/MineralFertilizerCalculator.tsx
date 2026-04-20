@@ -4,16 +4,18 @@ import { useParams } from 'react-router-dom';
 import ClientForm from '../../modules/Minerals/components/ClientForm/ClientForm';
 import ManualForm from '../../modules/Minerals/components/ManualForm/ManualForm';
 import Result from '../../modules/Minerals/components/Result/Result';
-import { Calculator } from '../../modules/Minerals/hooks/useCalculate';
+import { NutrientConfig } from '../../modules/Minerals/data/fertilizersData';
+import { Calculator } from '../../modules/Minerals/hooks/fertilizerCalculator';
 import type {
   IClientFormSchema,
   IManualFormSchema,
+} from '../../modules/Minerals/types/formSchemes';
+import type {
   INutrientResultCard,
   IResults,
   ITotalPriceResultCard,
   TResultCard,
 } from '../../modules/Minerals/types/minerals.types';
-import { NutrientConfig } from '../../modules/Minerals/data/fertilizersData';
 
 const createInitialResultCards = (): TResultCard[] => {
   const nutrientCards: INutrientResultCard[] = NutrientConfig.map((nutrient) => {

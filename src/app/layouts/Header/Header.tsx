@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 
-import { PROGRAM_LIST, type IProgram } from '../../../data/programList';
+import { PROGRAM_LIST } from '../../../data/programList';
+import { Clients } from '../../../modules/Minerals/data/clientsData';
 import logoLab from '../../../shared/assets/logo-lab.png';
 import logoTahs from '../../../shared/assets/logo-tahs.png';
 import usePopover from '../../../shared/hooks/usePopover';
@@ -8,9 +9,8 @@ import Bubble, { BubbleLink, BubbleRouterLink } from '../../../shared/UI/Bubble/
 import Burger from '../../../shared/UI/Burger/Burger';
 import Menu from '../../../shared/UI/Menu/Menu';
 import { useProgramContext } from '../../providers/AppContext';
-import ss from './Header.module.scss';
-import { Clients } from '../../../modules/Minerals/data/clientsData';
 import type { Identifiers } from '../../types/global.types';
+import ss from './Header.module.scss';
 
 const getProgramLabel = (value: string): string => {
   const program = PROGRAM_LIST.find((p) => p.key === value);
@@ -71,7 +71,8 @@ const HeaderContent = () => {
   const { isOpen, toClose, toOpen, wrapperRef } = usePopover();
   const { isMobileDisplay } = useProgramContext();
   const burgerToggleHandler = () => {
-    isOpen ? toClose() : toOpen();
+    if (isOpen) toClose();
+    else toOpen();
   };
   return isMobileDisplay ? (
     <div
@@ -125,14 +126,6 @@ const HeaderNav = ({
         </li>
       </ul>
     </nav>
-  );
-};
-
-const NavItem = ({ item }: { item: IProgram }) => {
-  return (
-    <li className={ss.navItem}>
-      <BubbleRouterLink to={`${item.key}`}>{item.label}</BubbleRouterLink>
-    </li>
   );
 };
 

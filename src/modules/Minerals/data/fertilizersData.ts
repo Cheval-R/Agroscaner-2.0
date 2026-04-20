@@ -1,6 +1,35 @@
 import type { Identifiers } from '../../../app/types/global.types';
 import type { IFertilizer, NPK, NPKLabel } from '../types/types';
 
+const NITROGEN_FERTILIZERS: Identifiers[] = [
+  { key: 'none', label: 'Нет' },
+  { key: 'ammiachnaya-selitra', label: 'Аммиачная селитра' },
+  { key: 'sulfonitrat-30-7', label: 'Сульфонитрат (30:7)' },
+  { key: 'sulfonitrat-26-13', label: 'Сульфонитрат (26:13)' },
+  { key: 'kas-28', label: 'КАС(28)' },
+  { key: 'karbamid', label: 'Карбамид' },
+  { key: 'sulfat-ammoniya', label: 'Сульфат аммония' },
+  { key: 'bezvodnyy-ammiak', label: 'Безводный аммиак' },
+];
+
+const PHOSPHORUS_FERTILIZERS = [
+  { key: 'none', label: 'Нет' },
+  { key: 'ammofos-52', label: 'Аммофос(52)' },
+  { key: 'ammofos-46', label: 'Аммофос(46)' },
+  { key: 'diammofoska', label: 'Диаммофоска' },
+  { key: 'azofoska-15', label: 'Азофоска(15)' },
+  { key: 'azofoska-16', label: 'Азофоска(16)' },
+  { key: 'npks-4', label: 'NPKS(4)' },
+  { key: 'npks-8', label: 'NPKS(8)' },
+  { key: 'fosmuka', label: 'Фосмука' },
+];
+
+export const POTASSIUM_FERTILIZERS = [
+  { key: 'none', label: 'Нет' },
+  { key: 'kaliy-hloristyy', label: 'Калий хлористый' },
+  { key: 'kaliy-sernokislyy', label: 'Калий сернокислый' },
+];
+
 export const Fertilizers: IFertilizer[] = [
   {
     label: 'Нет',
@@ -184,66 +213,16 @@ export const NutrientConfig: INutrientConfig[] = [
   {
     key: 'nitrogen',
     label: 'Азот',
-    fertilizerList: [
-      { key: 'none', label: 'Нет' },
-      { key: 'ammiachnaya-selitra', label: 'Аммиачная селитра' },
-      { key: 'sulfonitrat-30-7', label: 'Сульфонитрат (30:7)' },
-      { key: 'sulfonitrat-26-13', label: 'Сульфонитрат (26:13)' },
-      { key: 'kas-28', label: 'КАС(28)' },
-      { key: 'karbamid', label: 'Карбамид' },
-      { key: 'sulfat-ammoniya', label: 'Сульфат аммония' },
-      { key: 'bezvodnyy-ammiak', label: 'Безводный аммиак' },
-    ],
+    fertilizerList: NITROGEN_FERTILIZERS,
   },
   {
     key: 'phosphorus',
     label: 'Фосфор',
-    fertilizerList: [
-      { key: 'none', label: 'Нет' },
-      { key: 'ammofos-52', label: 'Аммофос(52)' },
-      { key: 'ammofos-46', label: 'Аммофос(46)' },
-      { key: 'diammofoska', label: 'Диаммофоска' },
-      { key: 'azofoska-15', label: 'Азофоска(15)' },
-      { key: 'azofoska-16', label: 'Азофоска(16)' },
-      { key: 'npks-4', label: 'NPKS(4)' },
-      { key: 'npks-8', label: 'NPKS(8)' },
-      { key: 'fosmuka', label: 'Фосмука' },
-    ],
+    fertilizerList: PHOSPHORUS_FERTILIZERS,
   },
   {
     key: 'potassium',
     label: 'Калий',
-    fertilizerList: [
-      { key: 'none', label: 'Нет' },
-      { key: 'kaliy-hloristyy', label: 'Калий хлористый' },
-      { key: 'kaliy-sernokislyy', label: 'Калий сернокислый' },
-    ],
+    fertilizerList: POTASSIUM_FERTILIZERS,
   },
 ] as const;
-
-export const NITROGEN_FERTILIZERS: Identifiers[] = [
-  { key: 'none', label: 'Нет' },
-  { key: 'ammiachnaya-selitra', label: 'Аммиачная селитра' },
-  { key: 'sulfonitrat-30-7', label: 'Сульфонитрат (30:7)' },
-  { key: 'sulfonitrat-26-13', label: 'Сульфонитрат (26:13)' },
-  { key: 'kas-28', label: 'КАС(28)' },
-  { key: 'karbamid', label: 'Карбамид' },
-  { key: 'sulfat-ammoniya', label: 'Сульфат аммония' },
-  { key: 'bezvodnyy-ammiak', label: 'Безводный аммиак' },
-];
-export const PHOSPHORUS_FERTILIZERS = [
-  { key: 'none', label: 'Нет' },
-  { key: 'ammofos-52', label: 'Аммофос(52)' },
-  { key: 'ammofos-46', label: 'Аммофос(46)' },
-  { key: 'diammofoska', label: 'Диаммофоска' },
-  { key: 'azofoska-15', label: 'Азофоска(15)' },
-  { key: 'azofoska-16', label: 'Азофоска(16)' },
-  { key: 'npks-4', label: 'NPKS(4)' },
-  { key: 'npks-8', label: 'NPKS(8)' },
-  { key: 'fosmuka', label: 'Фосмука' },
-];
-export const POTASSIUM_FERTILIZERS = [
-  { key: 'none', label: 'Нет' },
-  { key: 'kaliy-hloristyy', label: 'Калий хлористый' },
-  { key: 'kaliy-sernokislyy', label: 'Калий сернокислый' },
-];

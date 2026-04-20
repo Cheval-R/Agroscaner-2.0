@@ -15,7 +15,5 @@ export const getSumEffectiveTemperature = (
     sumEffectiveTemperature[i] = Math.round(tempSum);
   }
 
-  console.log(sumEffectiveTemperature);
-
   return sumEffectiveTemperature;
 };

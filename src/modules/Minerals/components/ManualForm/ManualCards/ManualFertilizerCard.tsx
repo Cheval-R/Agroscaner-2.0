@@ -6,13 +6,13 @@ import {
   type UseFormSetValue,
 } from 'react-hook-form';
 
+import type { Identifiers } from '../../../../../app/types/global.types';
 import Bubble, { BubbleInput } from '../../../../../shared/UI/Bubble/Bubble';
 import Select from '../../../../../shared/UI/Select/Select';
-import type { IManualFormSchema } from '../../../types/minerals.types';
-import ss from './ManualCard.module.scss';
-import type { NPK } from '../../../types/types';
-import type { Identifiers } from '../../../../../app/types/global.types';
 import { Fertilizers } from '../../../data/fertilizersData';
+import type { IManualFormSchema } from '../../../types/formSchemes';
+import type { NPK } from '../../../types/types';
+import ss from './ManualCard.module.scss';
 
 interface Props {
   title: string;
@@ -37,14 +37,17 @@ const ManualFertilizerCard = ({
     return Fertilizers.find((fertilizer) => fertilizer.key === key)?.price;
   };
   return (
-    <Bubble legend={title} className={ss.card}>
+    <Bubble
+      legend={title}
+      className={ss.card}
+    >
       <BubbleInput
         legend="В почве, мг/кг"
         inputType="number"
         {...register(`${fertilizerKey}.soilValue`, {
           required: 'Обязательное поле',
           min: { value: 0, message: 'Положительное число' },
-          valueAsNumber: true,
+          pattern: { value: /^\d+(\.\d{1,3})?$/, message: 'Только число' },
         })}
         errorMessage={formState.errors?.[fertilizerKey]?.soilValue?.message}
       />
@@ -61,8 +64,8 @@ const ManualFertilizerCard = ({
               selectOption={(optionKey: string) => {
                 onChange(optionKey);
                 const price = getFertilizerPrice(optionKey);
-                if (price) {
-                  setValue(`${fertilizerKey}.price`, price);
+                if (price !== undefined) {
+                  setValue(`${fertilizerKey}.price`, String(price));
                 }
               }}
               errorMessage={error?.message}
@@ -77,7 +80,7 @@ const ManualFertilizerCard = ({
         {...register(`${fertilizerKey}.price`, {
           required: 'Обязательное поле',
           min: { value: 0, message: 'Положительное число' },
-          valueAsNumber: true,
+          pattern: { value: /^\d+(\.\d{1,3})?$/, message: 'Только число' },
         })}
         errorMessage={formState.errors?.[fertilizerKey]?.price?.message}
       />

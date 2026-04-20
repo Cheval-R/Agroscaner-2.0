@@ -1,4 +1,7 @@
-interface TResultValue { label: string; value: string }
+interface TResultValue {
+  label: string;
+  value: string;
+}
 
 export interface INutrientResult {
   physWeightPerGa: TResultValue;
@@ -7,81 +10,50 @@ export interface INutrientResult {
   pricePerField: TResultValue;
 }
 
-export interface IFieldResult {
+interface IFieldResult {
   pricePerGa: TResultValue;
   pricePerField: TResultValue;
 }
 
 export interface INutrientResultCard {
-  key: "nitrogen" | "potassium" | "phosphorus";
+  key: 'nitrogen' | 'potassium' | 'phosphorus';
   label: string;
   results: INutrientResult;
 }
 export interface ITotalPriceResultCard {
-  key: "total";
+  key: 'total';
   label: string;
   results: IFieldResult;
 }
 export type TResultCard = INutrientResultCard | ITotalPriceResultCard;
 
-export interface IManualFormSchema {
-  nitrogen: {
-    soilValue: number;
-    fertilizer: string;
-    price: number;
-  };
-  phosphorus: {
-    soilValue: number;
-    fertilizer: string;
-    price: number;
-  };
-  potassium: {
-    soilValue: number;
-    fertilizer: string;
-    price: number;
-  };
-  field: {
-    area: number;
-    crop: string;
-    harvest: number;
-  };
-}
-
-export interface IClientFormSchema {
-  field: {
-    name: string;
-    area: number;
-    crop: string;
-    harvest: number;
-  };
-
-  nitrogen: {
-    fertilizer: string;
-    price: number;
-  };
-  phosphorus: {
-    fertilizer: string;
-    price: number;
-  };
-  potassium: {
-    fertilizer: string;
-    price: number;
-  };
-}
-
 export interface IResults {
   nitrogen: IFertilizerResult;
   potassium: IFertilizerResult;
   phosphorus: IFertilizerResult;
-  field: {
-    pricePerGa: number;
-    pricePerField: number;
-  };
+  field: ITotalResult;
 }
 
-interface IFertilizerResult {
+export interface IFertilizerResult {
   physWeightPerGa: number;
   physWeightPerField: number;
   pricePerGa: number;
   pricePerField: number;
 }
+export interface ITotalResult {
+  pricePerGa: number;
+  pricePerField: number;
+}
+
+export interface IFertilizerResultItem {
+  key: 'physWeightPerField' | 'physWeightPerGa' | 'pricePerField' | 'pricePerGa';
+  label: string;
+  value: string;
+}
+export interface ITotalResultItem {
+  key: 'pricePerField' | 'pricePerGa';
+  label: string;
+  value: string;
+}
+
+export type TResultItem = IFertilizerResultItem | ITotalResultItem;

@@ -1,11 +1,11 @@
 import type React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import type { Identifiers, ProgramKey } from '../../../app/types/global.types';
 import usePopover from '../../hooks/usePopover';
 import { BubbleButton } from '../Bubble/Bubble';
 import Dropdown from '../Dropdown/Dropdown';
 import ss from './Menu.module.scss';
-import type { Identifiers, ProgramKey } from '../../../app/types/global.types';
 
 const Menu = ({
   programKey,

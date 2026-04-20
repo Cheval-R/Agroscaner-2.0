@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import { type SubmitHandler, useForm } from 'react-hook-form';
+import { type SubmitHandler, useForm, useWatch } from 'react-hook-form';
 
 import Form from '../../modules/Corn/Form/Form';
+import {
+  getPredictionTemperature,
+  type IChartData,
+} from '../../modules/Corn/functions/getPredictionTemperature';
+import { getTodayDate } from '../../modules/Corn/functions/getTodayDate';
 import LineChart from '../../modules/Corn/LineChart/LineChart';
 import Map from '../../modules/Corn/Map/Map';
 import type { ICornFormSchema } from '../../modules/Corn/types/Corn.types';
-import { getTodayDate } from '../../modules/Corn/functions/getTodayDate';
-import {
-  getPredictionTemperature,
-  type TForecastTemperature,
-} from '../../modules/Corn/functions/getPredictionTemperature';
+import ss from './CornSilageHarvestCalculator.module.scss';
+import Panel from '../../modules/Corn/Panel/Panel';
 
 const CornSilageHarvestCalculator = () => {
-  const [chartData, setChartData] = useState<TForecastTemperature | null>(null);
+  const [chartData, setChartData] = useState<IChartData[] | null>(null);
 
-  const { handleSubmit, control, formState, setValue, getValues } = useForm<ICornFormSchema>({
+  const { handleSubmit, control, formState, setValue } = useForm<ICornFormSchema>({
     defaultValues: {
       longitude: '49.118024',
       latitude: '55.795214',
@@ -22,38 +24,59 @@ const CornSilageHarvestCalculator = () => {
       sowingDate: getTodayDate(),
     },
   });
+
   const customOnSubmit: SubmitHandler<ICornFormSchema> = async (data) => {
     setChartData(await getPredictionTemperature(data, Number(data.baseTemperature)));
-    console.log('chartData', chartData);
   };
+
+  const [longitude, latitude] = useWatch({
+    control,
+    name: ['longitude', 'latitude'],
+  });
+
+  const handleLocationChange = (lat: number, lon: number) => {
+    setValue('latitude', String(lat));
+    setValue('longitude', String(lon));
+  };
+
   return (
-    <section>
+    <section className={ss.page}>
       <div className="container">
-        <Form
-          handleSubmit={handleSubmit(customOnSubmit)}
-          control={control}
-          formState={formState}
-        />
-        <Map
-          coordinates={{
-            longitude: Number(getValues('longitude')),
-            latitude: Number(getValues('latitude')),
-          }}
-          onCoordinatesChange={(coordinates: { latitude: string; longitude: string }) => {
-            setValue('latitude', coordinates.latitude, {
-              shouldValidate: true,
-            });
-            setValue('longitude', coordinates.longitude, {
-              shouldValidate: true,
-            });
-          }}
-        />
-        {chartData && (
-          <LineChart
-            data={chartData}
-            baseTemp={Number(getValues('baseTemperature'))}
-          />
-        )}
+        <div className={ss.workspace}>
+          <div className={ss.hero}>
+            <Panel
+              eyebrow="Настройка расчёта"
+              title="Параметры прогноза по кукурузе"
+              description="Заполни координаты, дату посева и базовую температуру. Карта и форма связаны между собой, поэтому можно работать любым удобным способом."
+            >
+              <Form
+                onSubmit={handleSubmit(customOnSubmit)}
+                control={control}
+                formState={formState}
+              />
+            </Panel>
+            <Panel
+              eyebrow="Карта поля"
+              title="Выбери точку на карте"
+              description="Кликни по карте или перетащи маркер, чтобы сразу обновить координаты в форме."
+            >
+              <Map
+                longitude={Number(longitude)}
+                latitude={Number(latitude)}
+                onLocationChange={handleLocationChange}
+              />
+            </Panel>
+          </div>
+        </div>
+        {chartData ? (
+          <Panel
+            eyebrow="Результат прогноза"
+            title="График накопления температур"
+            description="Динамика среднесуточной температуры и накопления сумма эффективных температур."
+          >
+            <LineChart chartData={chartData} />
+          </Panel>
+        ) : null}
       </div>
     </section>
   );

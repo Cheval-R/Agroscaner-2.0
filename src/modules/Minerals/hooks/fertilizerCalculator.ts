@@ -1,13 +1,11 @@
 import { Clients } from '../data/clientsData';
 import { Crops } from '../data/cropData';
 import { Fertilizers } from '../data/fertilizersData';
-import type { IClientFormSchema, IManualFormSchema, IResults } from '../types/minerals.types';
+import type { IClientFormSchema, IManualFormSchema } from '../types/formSchemes';
+import type { IResults } from '../types/minerals.types';
 
-const isManualForm = (
-  data: IClientFormSchema | IManualFormSchema,
-  clientKey?: string,
-): data is IManualFormSchema => {
-  return !clientKey;
+const isManualForm = (data: IClientFormSchema | IManualFormSchema): data is IManualFormSchema => {
+  return 'soilValue' in data.nitrogen;
 };
 
 export class Calculator {
@@ -48,34 +46,35 @@ export class Calculator {
   };
 
   constructor(data: IClientFormSchema | IManualFormSchema, clientKey: string) {
-    const isManual = isManualForm(data, clientKey);
+    const isManual = isManualForm(data);
 
     this.fertilizers.nitrogen = {
       ...this.getFertilizerData(data.nitrogen.fertilizer),
-      price: data.nitrogen.price,
+      price: Number(data.nitrogen.price),
     };
     this.fertilizers.phosphorus = {
       ...this.getFertilizerData(data.phosphorus.fertilizer),
-      price: data.phosphorus.price,
+      price: Number(data.phosphorus.price),
     };
     this.fertilizers.potassium = {
       ...this.getFertilizerData(data.potassium.fertilizer),
-      price: data.potassium.price,
+      price: Number(data.potassium.price),
     };
     if (isManual) {
       this.field = {
         ...data.field,
-        harvest: data.field.harvest * 0.7,
+        area: Number(data.field.area),
+        harvest: Number(data.field.harvest) * 0.7,
         crop: { ...this.getCropData(data.field.crop) },
-        nitrogen: data.nitrogen.soilValue,
-        potassium: data.potassium.soilValue,
-        phosphorus: data.phosphorus.soilValue,
+        nitrogen: Number(data.nitrogen.soilValue),
+        potassium: Number(data.potassium.soilValue),
+        phosphorus: Number(data.phosphorus.soilValue),
       };
     } else {
       const fieldData = this.getFieldData(data.field.name, clientKey);
       this.field = {
         ...data.field,
-        harvest: data.field.harvest * 0.7,
+        harvest: Number(data.field.harvest) * 0.7,
         ...fieldData,
         crop: { ...this.getCropData(data.field.crop) },
       };

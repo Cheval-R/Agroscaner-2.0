@@ -1,8 +1,10 @@
+import type React from 'react';
 import type { ICornFormSchema } from '../types/Corn.types';
+import { getSumEffectiveTemperature } from './getSumEffectiveTemperature';
 
 const START_DATE_TO_GET_HISTORICAL_DATE = 2010;
 
-const MAX_YEARS_PER_REQUEST = 5;
+const MAX_YEARS_PER_REQUEST = 1;
 
 interface IMeanTemperature {
   meanTemp: number[];
@@ -23,10 +25,16 @@ type IHistoricalTemperatureData = Record<string, IMeanTemperature>;
 
 // ? TODO 3 ПОправить обработку ошибок фетчей, сделать какую-то выпадашку чтобы понимать ошибку,
 
+export interface IChartData {
+  date: string;
+  meanTemp: number;
+  sumEffectiveTemperature: number;
+}
+
 export async function getPredictionTemperature(
   data: ICornFormSchema,
   baseTemp: number,
-): Promise<TForecastTemperature> {
+): Promise<IChartData[]> {
   const { startMonth, startDay } = getStartDatePrediction(data.sowingDate);
 
   const actualTemperature: TForecastTemperature = sowingDateHasPassed(data.sowingDate)
@@ -41,13 +49,23 @@ export async function getPredictionTemperature(
   );
 
   const predictedTemperature = forecastTemperature(historicalData);
+  // return predictedTemperature;
 
   const filteredPredictedTemperature = filterPredictedTemperatureByBaseTemp(
     [...actualTemperature, ...predictedTemperature],
     baseTemp,
   );
 
-  return filteredPredictedTemperature;
+  const sumEffectiveTemperature = getSumEffectiveTemperature(
+    filteredPredictedTemperature,
+    baseTemp,
+  );
+
+  const resultData: IChartData[] = filteredPredictedTemperature.map((e, i) => {
+    return { ...e, sumEffectiveTemperature: sumEffectiveTemperature[i] };
+  });
+
+  return resultData;
 }
 
 function filterPredictedTemperatureByBaseTemp(
@@ -58,8 +76,13 @@ function filterPredictedTemperatureByBaseTemp(
   const endIndex = predictedTemperature.findLastIndex(
     (elem) => Math.round(elem.meanTemp) > baseTemp,
   );
+  if (startIndex === -1) return [];
 
-  return predictedTemperature.slice(startIndex, endIndex);
+  if (endIndex === -1) return predictedTemperature.slice(startIndex);
+
+  // if(startIndex===endIndex) return [predictedTemperature[startIndex]]
+
+  return predictedTemperature.slice(startIndex, endIndex + 1);
 }
 
 function getStartDatePrediction(sowingDate: string): { startMonth: string; startDay: string } {
@@ -89,7 +112,11 @@ async function fetchHistoricalData(
 
   const results: Record<string, IMeanTemperature> = {};
 
-  for (let year = START_DATE_TO_GET_HISTORICAL_DATE; year <= endYear; ) {
+  for (
+    let year = START_DATE_TO_GET_HISTORICAL_DATE;
+    year <= endYear;
+    year += MAX_YEARS_PER_REQUEST
+  ) {
     const startDate = `${year}-${startMonth}-${startDay}`;
     const endDate = `${year}-12-31`;
 
@@ -120,7 +147,7 @@ async function fetchHistoricalDataByYear(url: string): Promise<IMeanTemperature>
       };
     })
     .catch((error) => {
-      console.error(error);
+      console.log(error);
       return { days: [], meanTemp: [] };
     });
 }
@@ -212,7 +239,7 @@ async function fetchTemperatureFromSowingToToday(
       return result;
     })
     .catch((error) => {
-      console.error(error);
+      console.log(error);
       return [];
     });
 }

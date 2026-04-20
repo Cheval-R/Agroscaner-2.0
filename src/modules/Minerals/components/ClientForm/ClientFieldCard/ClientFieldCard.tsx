@@ -9,10 +9,10 @@ import {
 
 import Bubble, { BubbleInput } from '../../../../../shared/UI/Bubble/Bubble';
 import Select from '../../../../../shared/UI/Select/Select';
-import type { IClient } from '../../../types/types';
-import type { IClientFormSchema } from '../../../types/minerals.types';
-import ss from '../ClientForm.module.scss';
 import { Crops } from '../../../data/cropData';
+import type { IClientFormSchema } from '../../../types/formSchemes';
+import type { IClient } from '../../../types/types';
+import ss from '../ClientForm.module.scss';
 
 interface Props {
   register: UseFormRegister<IClientFormSchema>;
@@ -55,7 +55,7 @@ const ClientFieldCard: React.FC<Props> = ({
               selectOption={(optionKey) => {
                 field.onChange(optionKey);
                 const area = fieldList.find((field) => field.key === optionKey)?.area;
-                setValue('field.area', area !== undefined ? area : 0);
+                setValue('field.area', area !== undefined ? String(area) : '0');
               }}
             />
           );
@@ -64,6 +64,7 @@ const ClientFieldCard: React.FC<Props> = ({
       <BubbleInput
         {...register('field.area', {
           required: 'Обязательное поле',
+          pattern: { value: /^\d+(\.\d{1,3})?$/, message: 'Только число' },
         })}
         legend="Площадь поля"
         errorMessage={formState.errors?.field?.area?.message}
@@ -86,7 +87,10 @@ const ClientFieldCard: React.FC<Props> = ({
         }}
       />
       <BubbleInput
-        {...register('field.harvest', { required: 'Обязательное поле' })}
+        {...register('field.harvest', {
+          required: 'Обязательное поле',
+          pattern: { value: /^\d+(\.\d{1,3})?$/, message: 'Только число' },
+        })}
         legend="Урожай"
         errorMessage={formState.errors?.field?.harvest?.message}
       />

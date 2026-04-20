@@ -4,12 +4,11 @@ import { useParams } from 'react-router-dom';
 
 import FallbackUI from '../../../../app/layouts/FallbackUI/FallbackUI';
 import Bubble, { BubbleButton } from '../../../../shared/UI/Bubble/Bubble';
-
-import type { IClientFormSchema } from '../../types/minerals.types';
+import { Clients } from '../../data/clientsData';
+import type { IClientFormSchema } from '../../types/formSchemes';
 import ClientFertilizerCard from './ClientFertilizerCard/ClientFertilizerCard';
 import ClientFieldCard from './ClientFieldCard/ClientFieldCard';
 import ss from './ClientForm.module.scss';
-import { Clients } from '../../data/clientsData';
 
 interface Props {
   calculate: (data: IClientFormSchema) => void;
@@ -21,18 +20,17 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
   const { register, handleSubmit, control, formState, setValue } = useForm<IClientFormSchema>({
     defaultValues: {
       field: {
-        area: 100,
+        area: '100',
         crop: 'pshenitsa-yarovaya',
-        harvest: 100,
-        name: '2',
+        harvest: '100',
       },
       nitrogen: {
-        price: 20.655,
+        price: '20.655',
         fertilizer: 'ammiachnaya-selitra',
       },
-      potassium: { price: 23, fertilizer: 'kaliy-hloristyy' },
+      potassium: { price: '23', fertilizer: 'kaliy-hloristyy' },
       phosphorus: {
-        price: 52,
+        price: '52',
         fertilizer: 'ammofos-52',
       },
     },
@@ -44,14 +42,16 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
 
   const client = Clients.find((client) => client.key === params.clientKey);
   if (!client) {
-    <FallbackUI errorMessage="Клиент не найден" />;
-    return null;
+    return <FallbackUI errorMessage="Клиент не найден" />;
   }
   return (
     <section className="section">
       <div className="container">
         <Bubble className={ss.title}>{client.label}</Bubble>
-        <form className={ss.form} onSubmit={handleSubmit(customOnSubmit)}>
+        <form
+          className={ss.form}
+          onSubmit={handleSubmit(customOnSubmit)}
+        >
           <ClientFieldCard
             control={control}
             formState={formState}
@@ -65,7 +65,10 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
             register={register}
             setValue={setValue}
           />
-          <BubbleButton type="submit" className={ss.expandFullWidth}>
+          <BubbleButton
+            type="submit"
+            className={ss.expandFullWidth}
+          >
             Рассчитать
           </BubbleButton>
         </form>

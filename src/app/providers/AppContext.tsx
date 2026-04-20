@@ -1,4 +1,5 @@
 import { createContext, type ReactNode, useContext } from 'react';
+
 import { useMediaQuery } from '../../shared/hooks/useMediaQuery.ts';
 
 interface AppContextValue {

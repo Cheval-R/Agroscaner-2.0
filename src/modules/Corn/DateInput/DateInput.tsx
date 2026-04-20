@@ -3,21 +3,22 @@ import './DateInput.scss';
 
 import AirDatepicker from 'air-datepicker';
 import React, { useEffect, useRef } from 'react';
-import type { FormState } from 'react-hook-form';
+import { type FormState } from 'react-hook-form';
 
 import { BubbleInput } from '../../../shared/UI/Bubble/Bubble';
-import type { ICornFormSchema } from '../types/Corn.types';
 import { getTodayDate } from '../functions/getTodayDate';
+import type { ICornFormSchema } from '../types/Corn.types';
 
 interface Props {
   formState: FormState<ICornFormSchema>;
-  onBlur: React.ChangeEventHandler<HTMLInputElement>;
+  onBlur: React.FocusEventHandler<HTMLInputElement>;
   onChange: (value: string | string[]) => void;
   value: string;
 }
 
 const DateInput: React.FC<Props> = ({ formState, onBlur, onChange, value }) => {
   const datePickerRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (!datePickerRef.current) return;
     const datePicker = new AirDatepicker(datePickerRef.current, {
@@ -26,7 +27,7 @@ const DateInput: React.FC<Props> = ({ formState, onBlur, onChange, value }) => {
       },
     });
     return () => datePicker.destroy();
-  }, []);
+  }, [onChange]);
 
   return (
     <BubbleInput

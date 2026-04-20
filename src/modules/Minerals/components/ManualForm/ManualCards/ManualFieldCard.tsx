@@ -3,10 +3,9 @@ import { type Control, Controller, type FormState, type UseFormRegister } from '
 
 import Bubble, { BubbleInput } from '../../../../../shared/UI/Bubble/Bubble';
 import Select from '../../../../../shared/UI/Select/Select';
-
-import type { IManualFormSchema } from '../../../types/minerals.types';
-import ss from './ManualCard.module.scss';
 import { Crops } from '../../../data/cropData';
+import type { IManualFormSchema } from '../../../types/formSchemes';
+import ss from './ManualCard.module.scss';
 
 interface Props {
   title: string;
@@ -27,7 +26,7 @@ const ManualFieldCard: React.FC<Props> = ({ title, register, control, formState 
         {...register('field.area', {
           required: 'Обязательное поле',
           min: { value: 0, message: 'Положительное число' },
-          valueAsNumber: true,
+          pattern: { value: /^\d+(\.\d{1,3})?$/, message: 'Только число' },
         })}
         errorMessage={formState.errors?.field?.area?.message}
       />
@@ -56,7 +55,7 @@ const ManualFieldCard: React.FC<Props> = ({ title, register, control, formState 
         {...register('field.harvest', {
           required: 'Обязательное поле',
           min: { value: 0, message: 'Положительное число' },
-          valueAsNumber: true,
+          pattern: { value: /^\d+(\.\d{1,3})?$/, message: 'Только число' },
         })}
         errorMessage={formState.errors?.field?.harvest?.message}
       />

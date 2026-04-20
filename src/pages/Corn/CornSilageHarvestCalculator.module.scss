@@ -1,0 +1,71 @@
+.page {
+  padding: clamp(28px, 4vw, 42px) 0 clamp(36px, 5vw, 56px);
+}
+
+.workspace {
+  display: grid;
+  gap: clamp(20px, 3vw, 28px);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 28px);
+  align-items: stretch;
+  margin-bottom: clamp(20px, 3vw, 28px);
+}
+
+
+
+.chartPanel {
+  min-height: clamp(420px, 55vw, 620px);
+}
+
+.emptyState {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  min-height: clamp(300px, 40vw, 440px);
+  padding: clamp(28px, 4vw, 40px);
+  text-align: center;
+  border: 1px dashed rgba(90, 123, 85, 0.28);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(237, 244, 238, 0.72)),
+    rgba(245, 249, 246, 0.92);
+  color: #51625a;
+
+  strong {
+    font-size: 1.1rem;
+    color: #21342a;
+  }
+}
+
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .chartPanel {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 20px 16px;
+    border-radius: 28px;
+  }
+
+  .panel::after {
+    inset-inline: 18px;
+  }
+
+  .title {
+    font-size: 1.45rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+}

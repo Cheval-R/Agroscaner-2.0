@@ -33,7 +33,7 @@ const Select = ({ optionsList, activeKey, legend, selectOption, onBlur, errorMes
   useEffect(() => {
     activeKeyRef.current = activeKey;
     setQuery(activeKey ? FindActiveOptionLabel(optionsList, activeKey) : '');
-  }, [activeKey]);
+  }, [activeKey, optionsList]);
   const clearQuery = typeof query === 'string' ? query.trim().toLowerCase() : '';
 
   const filteredOptions =
@@ -42,7 +42,10 @@ const Select = ({ optionsList, activeKey, legend, selectOption, onBlur, errorMes
       : null;
 
   return (
-    <div className={styles.select} ref={wrapperRef}>
+    <div
+      className={styles.select}
+      ref={wrapperRef}
+    >
       <BubbleInput
         value={query}
         onFocus={toOpen}

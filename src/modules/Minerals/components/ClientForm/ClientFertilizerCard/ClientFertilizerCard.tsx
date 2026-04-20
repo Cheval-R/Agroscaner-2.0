@@ -2,10 +2,10 @@ import React from 'react';
 import type { Control, FormState, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 import Bubble from '../../../../../shared/UI/Bubble/Bubble';
-import type { IClientFormSchema } from '../../../types/minerals.types';
+import { NutrientConfig } from '../../../data/fertilizersData';
+import type { IClientFormSchema } from '../../../types/formSchemes';
 import ss from '../ClientForm.module.scss';
 import FertilizerRow from './FertilizerRow';
-import { NutrientConfig } from '../../../data/fertilizersData';
 
 interface Props {
   register: UseFormRegister<IClientFormSchema>;

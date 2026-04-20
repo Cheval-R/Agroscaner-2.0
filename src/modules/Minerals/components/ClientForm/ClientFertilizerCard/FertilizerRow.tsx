@@ -10,9 +10,9 @@ import {
 import { BubbleInput } from '../../../../../shared/UI/Bubble/Bubble';
 import Select from '../../../../../shared/UI/Select/Select';
 import { Fertilizers } from '../../../data/fertilizersData';
-import type { IClientFormSchema } from '../../../types/minerals.types';
+import type { IClientFormSchema } from '../../../types/formSchemes';
+import type { NPK, NPKLabel } from '../../../types/types';
 import ss from '../ClientForm.module.scss';
-import type { NPK } from '../../../types/types';
 
 interface Props {
   register: UseFormRegister<IClientFormSchema>;
@@ -20,7 +20,7 @@ interface Props {
   formState: FormState<IClientFormSchema>;
   setValue: UseFormSetValue<IClientFormSchema>;
   fertilizerKey: NPK;
-  fertilizerLabel: string;
+  fertilizerLabel: NPKLabel;
 }
 
 const FertilizerRow: React.FC<Props> = ({
@@ -56,7 +56,10 @@ const FertilizerRow: React.FC<Props> = ({
                   const fertilizerPrice = Fertilizers.find(
                     (fertilizer) => fertilizer.key === optionKey,
                   );
-                  setValue(`${fertilizerKey}.price`, fertilizerPrice ? fertilizerPrice.price : 0);
+                  setValue(
+                    `${fertilizerKey}.price`,
+                    fertilizerPrice ? String(fertilizerPrice.price) : '0',
+                  );
                 }}
               />
             );
@@ -64,7 +67,11 @@ const FertilizerRow: React.FC<Props> = ({
         />
         <BubbleInput
           legend="Цена, ₽/т"
-          {...register(rowInputsNames.price, { required: 'Обязательное поле' })}
+          {...register(rowInputsNames.price, {
+            required: 'Обязательное поле',
+            min: { value: 0, message: 'Больше 0' },
+            pattern: { value: /^\d+(\.\d{1,3})?$/, message: 'Только число' },
+          })}
           errorMessage={formState.errors?.[fertilizerKey]?.price?.message}
         />
       </div>
