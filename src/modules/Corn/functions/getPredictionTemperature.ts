@@ -214,9 +214,10 @@ const sowingDateHasPassed = (date: string): boolean => {
 async function fetchTemperatureFromSowingToToday(
   data: ICornFormSchema,
 ): Promise<TForecastTemperature> {
-  const startDate = convertDateToApiFormat(data.sowingDate);
+  // const startDate = convertDateToApiFormat(data.sowingDate);
+
   const endDate = new Date().toISOString().split('T')[0];
-  const apiURL = `https://archive-api.open-meteo.com/v1/archive?latitude=${data.latitude}&longitude=${data.longitude}&start_date=${startDate}&end_date=${endDate}&daily=temperature_2m_mean`;
+  const apiURL = `https://archive-api.open-meteo.com/v1/archive?latitude=${data.latitude}&longitude=${data.longitude}&start_date=${data.sowingDate}&end_date=${endDate}&daily=temperature_2m_mean`;
 
   return fetch(apiURL)
     .then((response) => {

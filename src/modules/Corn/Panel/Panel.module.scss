@@ -12,6 +12,12 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.78);
 }
 
+.panelError {
+  background:
+    radial-gradient(circle at top left, rgba(255, 218, 126, 0.22), transparent 38%),
+    linear-gradient(160deg, rgba(255, 0, 0, 0.279), rgba(247, 250, 248, 0.94));
+}
+
 .panel::after {
   content: '';
   position: absolute;
@@ -49,7 +55,7 @@
 }
 
 .description {
-  max-width: 62ch;
+  // max-width: 62ch;
   margin: 0;
   color: #54655d;
   line-height: 1.55;

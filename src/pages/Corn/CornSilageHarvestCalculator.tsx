@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { type SubmitHandler, useForm, useWatch } from 'react-hook-form';
 
-import Form from '../../modules/Corn/Form/Form';
 import {
   getPredictionTemperature,
   type IChartData,
@@ -12,11 +11,20 @@ import Map from '../../modules/Corn/Map/Map';
 import type { ICornFormSchema } from '../../modules/Corn/types/Corn.types';
 import ss from './CornSilageHarvestCalculator.module.scss';
 import Panel from '../../modules/Corn/Panel/Panel';
+import Form from '../../modules/Corn/Form/Form';
 
 const CornSilageHarvestCalculator = () => {
   const [chartData, setChartData] = useState<IChartData[] | null>(null);
+  const [isCalculated, setIsCalculated] = useState<boolean>(false);
+  const chartRef = useRef<HTMLDivElement | null>(null);
 
-  const { handleSubmit, control, formState, setValue } = useForm<ICornFormSchema>({
+  useEffect(() => {
+    if (chartData && chartRef.current) {
+      chartRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [chartData]);
+
+  const { handleSubmit, control, register, formState, setValue } = useForm<ICornFormSchema>({
     defaultValues: {
       longitude: '49.118024',
       latitude: '55.795214',
@@ -26,7 +34,16 @@ const CornSilageHarvestCalculator = () => {
   });
 
   const customOnSubmit: SubmitHandler<ICornFormSchema> = async (data) => {
-    setChartData(await getPredictionTemperature(data, Number(data.baseTemperature)));
+    setIsCalculated(true);
+    try {
+      const chartData = await getPredictionTemperature(data, Number(data.baseTemperature));
+      setChartData(chartData);
+    } catch (error) {
+      console.error('Ошибка при расчёте:', error);
+      // Можно показать уведомление: "Не удалось выполнить расчёт"
+    } finally {
+      setIsCalculated(false); // ✅ Скрываем лоадер в любом случае
+    }
   };
 
   const [longitude, latitude] = useWatch({
@@ -40,26 +57,21 @@ const CornSilageHarvestCalculator = () => {
   };
 
   return (
-    <section className={ss.page}>
+    <section className={ss.cornCalculator}>
       <div className="container">
         <div className={ss.workspace}>
           <div className={ss.hero}>
             <Panel
               eyebrow="Настройка расчёта"
               title="Параметры прогноза по кукурузе"
-              description="Заполни координаты, дату посева и базовую температуру. Карта и форма связаны между собой, поэтому можно работать любым удобным способом."
+              description="Заполните координаты, дату посева и базовую температуру. Карта и форма связаны между собой, поэтому можно работать любым удобным способом."
             >
               <Form
-                onSubmit={handleSubmit(customOnSubmit)}
-                control={control}
                 formState={formState}
+                register={register}
+                onSubmit={handleSubmit(customOnSubmit)}
+                isCalculated={isCalculated}
               />
-            </Panel>
-            <Panel
-              eyebrow="Карта поля"
-              title="Выбери точку на карте"
-              description="Кликни по карте или перетащи маркер, чтобы сразу обновить координаты в форме."
-            >
               <Map
                 longitude={Number(longitude)}
                 latitude={Number(latitude)}
@@ -74,9 +86,19 @@ const CornSilageHarvestCalculator = () => {
             title="График накопления температур"
             description="Динамика среднесуточной температуры и накопления сумма эффективных температур."
           >
-            <LineChart chartData={chartData} />
+            <LineChart
+              ref={chartRef}
+              chartData={chartData}
+            />
           </Panel>
-        ) : null}
+        ) : (
+          <Panel
+            description="Не удалось выполнить расчёт, попробуйте позже"
+            eyebrow="Ошибка"
+            title="Ошибка расчёта"
+            isError={true}
+          />
+        )}
       </div>
     </section>
   );

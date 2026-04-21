@@ -1,13 +1,16 @@
-import React from "react";
+import React from 'react';
+import ss from './FallbackUI.module.scss';
 
 interface Props {
+  errorTitle: string;
   errorMessage: string;
 }
 
-const FallbackUI: React.FC<Props> = ({ errorMessage }) => {
+const FallbackUI: React.FC<Props> = ({ errorTitle, errorMessage }) => {
   return (
     <>
-      <div>{errorMessage}</div>
+      <h2 className={ss.errorTitle}>{errorTitle}</h2>
+      <p className={ss.errorMessage}>{errorMessage}</p>
     </>
   );
 };

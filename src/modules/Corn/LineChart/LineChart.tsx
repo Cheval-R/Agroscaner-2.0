@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState, type Ref } from 'react';
 import { Line } from 'react-chartjs-2';
 
 import type { IChartData } from '../functions/getPredictionTemperature';
@@ -33,6 +33,7 @@ Chart.register(
 
 interface Props {
   chartData: IChartData[];
+  ref: Ref<HTMLDivElement>;
 }
 
 function getDiapasonSeasonForHarvesting(chartData: IChartData[]) {
@@ -108,7 +109,7 @@ function createDataset(chartData: IChartData[], containerWidth: number): ChartDa
   ];
 }
 
-const LineChart: React.FC<Props> = ({ chartData }) => {
+const LineChart: React.FC<Props> = forwardRef(({ chartData }, ref) => {
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -192,7 +193,10 @@ const LineChart: React.FC<Props> = ({ chartData }) => {
   };
 
   return (
-    <div className={ss.chart}>
+    <div
+      className={ss.chart}
+      ref={ref}
+    >
       <div
         className={ss.canvas}
         ref={canvasRef}
@@ -208,6 +212,6 @@ const LineChart: React.FC<Props> = ({ chartData }) => {
       </div>
     </div>
   );
-};
+});
 
 export default LineChart;

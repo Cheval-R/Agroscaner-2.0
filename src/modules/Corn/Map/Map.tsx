@@ -11,10 +11,6 @@ import {
   YMapMarker,
 } from './lib/ymaps';
 import ss from './Map.module.scss';
-const LOCATION: YMapLocationRequest = {
-  center: [49.121358, 55.786949],
-  zoom: 9,
-};
 
 interface Props {
   latitude: number;
@@ -36,17 +32,22 @@ const Map: React.FC<Props> = ({ latitude, longitude, onLocationChange }) => {
 
   return ymaps3 ? (
     <div className={ss.mapShell}>
-      <div className={ss.meta}>
+      {/* <div className={ss.meta}>
         <span className={ss.coordinate}>
           Широта <strong>{latitude.toFixed(6)}</strong>
         </span>
         <span className={ss.coordinate}>
           Долгота <strong>{longitude.toFixed(6)}</strong>
         </span>
-      </div>
+      </div> */}
 
       <div className={ss.canvas}>
-        <YMap location={reactify.useDefault(LOCATION)}>
+        <YMap
+          location={reactify.useDefault({
+            center: [49.121358, 55.786949],
+            zoom: 9,
+          })}
+        >
           <YMapDefaultSchemeLayer />
           <YMapDefaultFeaturesLayer />
           <YMapMarker

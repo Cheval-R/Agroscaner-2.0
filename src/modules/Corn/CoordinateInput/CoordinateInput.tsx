@@ -1,8 +1,7 @@
-import React from "react";
-import { type Control,Controller } from "react-hook-form";
+import React from 'react';
+import { type FormState, type UseFormRegister } from 'react-hook-form';
 
-import { BubbleInput } from "../../../shared/UI/Bubble/Bubble";
-import type { ICornFormSchema } from "../types/Corn.types";
+import type { ICornFormSchema } from '../types/Corn.types';
 
 // Широта: -90.000000 до 90.000000 (до 6 знаков)
 const LATITUDE_PATTERN = /^-?([0-8]?[0-9](\.\d{1,6})?|90(\.0{1,6})?)$/;
@@ -11,32 +10,27 @@ const LATITUDE_PATTERN = /^-?([0-8]?[0-9](\.\d{1,6})?|90(\.0{1,6})?)$/;
 const LONGITUDE_PATTERN = /^-?((1?[0-7]?|[0-9])?[0-9](\.\d{1,6})?|180(\.0{1,6})?)$/;
 
 interface Props {
-  control: Control<ICornFormSchema>;
-  coordinateType: "latitude" | "longitude";
+  register: UseFormRegister<ICornFormSchema>;
+  coordinateType: 'latitude' | 'longitude';
+  formState: FormState<ICornFormSchema>;
+  ss: CSSModuleClasses;
 }
 
-const CoordinateInput: React.FC<Props> = ({ control, coordinateType }) => {
+const CoordinateInput: React.FC<Props> = ({ register, coordinateType, formState, ss }) => {
   return (
-    <Controller
-      name={coordinateType}
-      control={control}
-      rules={{
-        pattern: {
-          value: coordinateType === "latitude" ? LATITUDE_PATTERN : LONGITUDE_PATTERN,
-          message: `Введите корректную ${coordinateType === "latitude" ? "широту" : "долготу"}`,
-        },
-        required: { value: true, message: "Обязательное поле" },
-      }}
-      render={({ field, fieldState: { error } }) => {
-        return (
-          <BubbleInput
-            legend={`${coordinateType === "latitude" ? "Широта" : "Долгота"}`}
-            {...field}
-            errorMessage={error?.message}
-          />
-        );
-      }}
-    />
+    <label className={ss.inputWrapper}>
+      <span>{coordinateType === 'latitude' ? 'Широта' : 'Долгота'}</span>
+      <input
+        type="number"
+        step={0.000001}
+        {...register(coordinateType, {
+          required: { value: true, message: 'Обязательное' },
+        })}
+      />
+      {formState.errors.latitude?.message ? (
+        <span className={ss.errorMessage}>{formState.errors[coordinateType]?.message}</span>
+      ) : null}
+    </label>
   );
 };
 

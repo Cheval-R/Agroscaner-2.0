@@ -1,2 +1,3 @@
-import "./normalize.css";
-import "./global.css";
+import './normalize.css';
+import './global.css';
+import './var.scss';
