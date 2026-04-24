@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { type SubmitHandler, useForm, useWatch } from 'react-hook-form';
 
-import {
-  getPredictionTemperature,
-  type IChartData,
-} from '../../modules/Corn/functions/getPredictionTemperature';
+import { getPredictionTemperature, type IChartData } from '../../modules/Corn/functions/getPredictionTemperature';
 import { getTodayDate } from '../../modules/Corn/functions/getTodayDate';
 import LineChart from '../../modules/Corn/LineChart/LineChart';
 import Map from '../../modules/Corn/Map/Map';
@@ -14,15 +11,16 @@ import Panel from '../../modules/Corn/Panel/Panel';
 import Form from '../../modules/Corn/Form/Form';
 
 const CornSilageHarvestCalculator = () => {
+  const [isError, setIsError] = useState<boolean>(false);
   const [chartData, setChartData] = useState<IChartData[] | null>(null);
   const [isCalculated, setIsCalculated] = useState<boolean>(false);
   const chartRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (chartData && chartRef.current) {
+    if ((chartData || isError) && chartRef.current) {
       chartRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, [chartData]);
+  }, [chartData, isError]);
 
   const { handleSubmit, control, register, formState, setValue } = useForm<ICornFormSchema>({
     defaultValues: {
@@ -34,13 +32,14 @@ const CornSilageHarvestCalculator = () => {
   });
 
   const customOnSubmit: SubmitHandler<ICornFormSchema> = async (data) => {
+    setIsError(false);
     setIsCalculated(true);
     try {
       const chartData = await getPredictionTemperature(data, Number(data.baseTemperature));
       setChartData(chartData);
     } catch (error) {
       console.error('Ошибка при расчёте:', error);
-      // Можно показать уведомление: "Не удалось выполнить расчёт"
+      setIsError(true);
     } finally {
       setIsCalculated(false); // ✅ Скрываем лоадер в любом случае
     }
@@ -82,23 +81,22 @@ const CornSilageHarvestCalculator = () => {
         </div>
         {chartData ? (
           <Panel
+            ref={chartRef}
             eyebrow="Результат прогноза"
             title="График накопления температур"
             description="Динамика среднесуточной температуры и накопления сумма эффективных температур."
           >
-            <LineChart
-              ref={chartRef}
-              chartData={chartData}
-            />
+            <LineChart chartData={chartData} />
           </Panel>
-        ) : (
+        ) : isError ? (
           <Panel
+            ref={chartRef}
             description="Не удалось выполнить расчёт, попробуйте позже"
             eyebrow="Ошибка"
             title="Ошибка расчёта"
             isError={true}
           />
-        )}
+        ) : null}
       </div>
     </section>
   );

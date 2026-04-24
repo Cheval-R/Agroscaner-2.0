@@ -1,15 +1,5 @@
 import type { ChartDataset, ChartOptions, TooltipItem } from 'chart.js';
-import {
-  CategoryScale,
-  Chart,
-  Filler,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-} from 'chart.js';
+import { CategoryScale, Chart, Filler, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import React, { forwardRef, useEffect, useRef, useState, type Ref } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -20,34 +10,21 @@ const BASE_WIDTH = 1200; // условная "базовая" ширина
 const MAX_POINTS = 160; // максимум точек при BASE_WIDTH
 const MIN_POINTS = 8; // минимум точек при маленькой ширине
 
-Chart.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-);
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 interface Props {
   chartData: IChartData[];
-  ref: Ref<HTMLDivElement>;
 }
 
 function getDiapasonSeasonForHarvesting(chartData: IChartData[]) {
-  const optimalSeasonStartIndex = chartData.findIndex(
-    (elem) => elem.sumEffectiveTemperature >= 850,
-  );
+  const optimalSeasonStartIndex = chartData.findIndex((elem) => elem.sumEffectiveTemperature >= 850);
   let optimalSeasonEndIndex = chartData.findIndex((elem) => elem.sumEffectiveTemperature >= 950);
   if (optimalSeasonEndIndex === -1) optimalSeasonEndIndex = chartData.length - 1;
   return { optimalSeasonStartIndex, optimalSeasonEndIndex };
 }
 
 function createOptimalSeasonDataset(chartData: IChartData[]): ChartDataset<'line'> | undefined {
-  const { optimalSeasonStartIndex, optimalSeasonEndIndex } =
-    getDiapasonSeasonForHarvesting(chartData);
+  const { optimalSeasonStartIndex, optimalSeasonEndIndex } = getDiapasonSeasonForHarvesting(chartData);
 
   if (optimalSeasonStartIndex === -1) return;
 
@@ -109,7 +86,7 @@ function createDataset(chartData: IChartData[], containerWidth: number): ChartDa
   ];
 }
 
-const LineChart: React.FC<Props> = forwardRef(({ chartData }, ref) => {
+const LineChart: React.FC<Props> = ({ chartData }) => {
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -193,10 +170,7 @@ const LineChart: React.FC<Props> = forwardRef(({ chartData }, ref) => {
   };
 
   return (
-    <div
-      className={ss.chart}
-      ref={ref}
-    >
+    <div className={ss.chart}>
       <div
         className={ss.canvas}
         ref={canvasRef}
@@ -212,6 +186,6 @@ const LineChart: React.FC<Props> = forwardRef(({ chartData }, ref) => {
       </div>
     </div>
   );
-});
+};
 
 export default LineChart;
