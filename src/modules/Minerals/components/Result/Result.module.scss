@@ -1,0 +1,202 @@
+.result {
+  padding-top: 26px;
+  padding-bottom: clamp(24px, 4vw, 40px);
+}
+
+.header {
+  display: grid;
+  gap: 8px;
+  max-width: 58rem;
+  margin-bottom: clamp(18px, 3vw, 26px);
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5a7b55;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+  line-height: 1.05;
+  color: #14261d;
+}
+
+.description {
+  margin: 0;
+  color: #55665d;
+  line-height: 1.55;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.4vw, 24px);
+  align-items: stretch;
+  text-align: left;
+}
+
+.card {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  min-height: 100%;
+  padding: clamp(20px, 2.6vw, 28px);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at top left, rgba(250, 204, 21, 0.14), transparent 34%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.98), rgba(245, 249, 246, 0.94));
+  box-shadow:
+    0 18px 38px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: auto 24px 0;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(34, 197, 94, 0.85), rgba(250, 204, 21, 0.92));
+}
+
+.cardHeader {
+  display: grid;
+  gap: 8px;
+}
+
+.cardEyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #69816f;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+  line-height: 1;
+  color: #16271e;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric {
+  display: grid;
+  gap: 12px;
+  align-content: space-between;
+  min-height: 116px;
+  padding: 18px 18px 20px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(241, 246, 242, 0.92)),
+    rgba(248, 250, 252, 0.9);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.metricLabel {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #677971;
+}
+
+.metricValue {
+  font-size: clamp(1.2rem, 1.9vw, 1.75rem);
+  line-height: 1.05;
+  color: #15261d;
+}
+
+.totalCard {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(220px, 0.9fr) minmax(0, 1.8fr);
+  align-items: stretch;
+  background:
+    radial-gradient(circle at top right, rgba(250, 204, 21, 0.2), transparent 28%),
+    linear-gradient(135deg, #1b3a2a, #234c36);
+  box-shadow:
+    0 24px 50px rgba(17, 38, 28, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.totalCard::after {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.46), rgba(250, 204, 21, 0.96));
+}
+
+.totalCard .cardEyebrow {
+  color: rgba(244, 248, 245, 0.68);
+}
+
+.totalCard .cardTitle {
+  color: #f9fbfa;
+}
+
+.totalMetrics {
+  align-items: stretch;
+}
+
+.totalCard .metric {
+  min-height: 130px;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.totalCard .metricLabel {
+  color: rgba(244, 248, 245, 0.72);
+}
+
+.totalCard .metricValue {
+  color: #ffffff;
+}
+
+@media (max-width: 1100px) {
+  .wrapper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .totalCard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .header {
+    margin-bottom: 18px;
+  }
+
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: 20px 16px;
+    border-radius: 28px;
+  }
+
+  .card::after {
+    inset-inline: 18px;
+  }
+
+  .metric {
+    min-height: 96px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+}
