@@ -42,7 +42,12 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
 
   const client = Clients.find((client) => client.key === params.clientKey);
   if (!client) {
-    return <FallbackUI errorMessage="Клиент не найден" />;
+    return (
+      <FallbackUI
+        errorTitle="Ошибка выбора клиента"
+        errorMessage="Клиент не найден"
+      />
+    );
   }
   return (
     <section className="section">

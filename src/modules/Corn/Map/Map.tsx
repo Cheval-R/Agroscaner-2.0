@@ -1,4 +1,4 @@
-import type { LngLat, YMapLocationRequest } from '@yandex/ymaps3-types';
+import type { LngLat } from '@yandex/ymaps3-types';
 import type { MapEvent } from '@yandex/ymaps3-types/imperative/YMapFeature/types';
 import React from 'react';
 
@@ -51,10 +51,7 @@ const Map: React.FC<Props> = ({ latitude, longitude, onLocationChange }) => {
           <YMapDefaultSchemeLayer />
           <YMapDefaultFeaturesLayer />
           <YMapMarker
-            coordinates={reactify.useDefault([Number(longitude), Number(latitude)] as LngLat, [
-              latitude,
-              longitude,
-            ])}
+            coordinates={reactify.useDefault([Number(longitude), Number(latitude)] as LngLat, [latitude, longitude])}
             draggable={true}
             onDragEnd={handleMarkerDragEnd}
           >

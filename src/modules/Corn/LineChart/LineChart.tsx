@@ -1,6 +1,6 @@
 import type { ChartDataset, ChartOptions, TooltipItem } from 'chart.js';
 import { CategoryScale, Chart, Filler, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
-import React, { forwardRef, useEffect, useRef, useState, type Ref } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
 import type { IChartData } from '../functions/getPredictionTemperature';

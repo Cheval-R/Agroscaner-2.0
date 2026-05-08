@@ -17,6 +17,8 @@ interface Props {
 }
 
 const CoordinateInput: React.FC<Props> = ({ register, coordinateType, formState, ss }) => {
+  console.log(formState.errors[coordinateType]?.message);
+
   return (
     <label className={ss.inputWrapper}>
       <span>{coordinateType === 'latitude' ? 'Широта' : 'Долгота'}</span>
@@ -25,9 +27,13 @@ const CoordinateInput: React.FC<Props> = ({ register, coordinateType, formState,
         step={0.000001}
         {...register(coordinateType, {
           required: { value: true, message: 'Обязательное' },
+          pattern: {
+            value: coordinateType === 'latitude' ? LATITUDE_PATTERN : LONGITUDE_PATTERN,
+            message: 'Некорректные координаты',
+          },
         })}
       />
-      {formState.errors.latitude?.message ? (
+      {formState.errors[coordinateType]?.message ? (
         <span className={ss.errorMessage}>{formState.errors[coordinateType]?.message}</span>
       ) : null}
     </label>
