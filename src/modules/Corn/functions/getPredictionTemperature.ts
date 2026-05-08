@@ -259,9 +259,16 @@ function getStartDatePrediction(sowingDate: string): {
   let startDay = String(new Date().getDate() + 1).padStart(2, '0');
 
   if (!sowingDateHasPassed(sowingDate)) {
-    const sowingDateArray = sowingDate.split('.');
-    startMonth = sowingDateArray[1];
-    startDay = sowingDateArray[0];
+    const date = new Date(sowingDate);
+    startMonth = String(date.getMonth()).padStart(2, '0');
+    startDay = String(date.getDay()).padStart(2, '0');
+    // const sowingDateArray = sowingDate.split('.');
+    // startMonth = sowingDateArray[1];
+    // startDay = sowingDateArray[0];
+    // console.log(sowingDateArray);
   }
+  console.log(startMonth);
+  console.log(startDay);
+
   return { startMonth, startDay };
 }

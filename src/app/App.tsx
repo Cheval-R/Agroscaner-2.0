@@ -15,6 +15,10 @@ export default function App() {
         element={<Layout />}
       >
         <Route
+          path=""
+          element={<MineralFertilizerCalculator />}
+        />
+        <Route
           path="mineral-fertilizer-calculator"
           element={<MineralFertilizerCalculator />}
         >

@@ -30,19 +30,12 @@
     "@types/node": "^24.12.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "sass": "^1.97.3",
-    "vite": "^7.2.4"
-=======
-=======
->>>>>>> dev
-    "@types/yandex-maps": "^2.1.36",
+    "vite": "^7.2.4",
     "@vitejs/plugin-react": "^6.0.1",
     "@yandex/ymaps3-types": "^1.0.19287993",
     "eslint": "^9.39.4",
@@ -64,9 +57,5 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.1"
-<<<<<<< HEAD
->>>>>>> 1eb9ae9 (Поправил обработку асинхронных функций. Ошибку, при ошибке в расчетах либо в получении данных с сервера.)
-=======
->>>>>>> dev
   }
 }
