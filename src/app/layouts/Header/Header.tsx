@@ -14,7 +14,7 @@ import ss from './Header.module.scss';
 
 const getProgramLabel = (value: string): string => {
   const program = PROGRAM_LIST.find((p) => p.key === value);
-  if (!program) return 'Калькулятор';
+  if (!program) return 'Расчёт минеральных удобрений';
   return program.label;
 };
 

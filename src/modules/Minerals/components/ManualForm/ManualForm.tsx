@@ -62,7 +62,7 @@ const ManualForm = ({ calculate }: { calculate: (data: IManualFormSchema) => voi
               reset();
             }}
           >
-            reset
+            Сбросить
           </BubbleButton>
         </form>
       </div>

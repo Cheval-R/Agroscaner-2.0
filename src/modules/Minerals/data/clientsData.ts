@@ -3,7 +3,7 @@ import type { IClient } from '../types/types';
 export const Clients: IClient[] = [
   {
     key: 'pecherskoeStavropol',
-    label: 'Печерское (Ставропольский район)',
+    label: 'ООО «Печерское» (Ставропольский район)',
     fieldsList: [
       {
         label: '1/1',
@@ -149,7 +149,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'pecherskoeSyzran',
-    label: 'Печерское (Сызранский район)',
+    label: 'ООО «Печерское» (Сызранский район)',
     fieldsList: [
       {
         label: '105',
@@ -456,7 +456,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'planin',
-    label: 'Планин',
+    label: 'КФХ «Планин»',
     fieldsList: [
       {
         label: '202 га',
@@ -483,7 +483,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'nur',
-    label: 'Нур',
+    label: 'ООО «АФ «Нур»',
     fieldsList: [
       {
         label: '2',
@@ -538,7 +538,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'duslyk',
-    label: 'Дуслык',
+    label: 'ООО «Дуслык»',
     fieldsList: [
       {
         label: '140',
@@ -593,7 +593,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'anyak',
-    label: 'Аняк',
+    label: 'ООО «АФ «Аняк»',
     fieldsList: [
       {
         label: '3.4.246',
@@ -774,7 +774,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'tuganYak',
-    label: 'Туган-Як',
+    label: 'ООО «АФ «Родные края - Туган Як»',
     fieldsList: [
       {
         label: '12',
@@ -822,7 +822,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'staromainskaya',
-    label: 'Старомайнская',
+    label: 'ООО «АФ «Старомайнская»',
     fieldsList: [
       {
         label: '1(295 га)',
@@ -989,7 +989,7 @@ export const Clients: IClient[] = [
   },
   {
     key: 'abdullin',
-    label: 'Абдуллин',
+    label: 'КФХ «Абдуллин»',
     fieldsList: [
       {
         label: '25,7',
