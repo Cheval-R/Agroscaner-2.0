@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { type SubmitHandler, useForm, useWatch } from 'react-hook-form';
 
+import Form from '../../modules/Corn/Form/Form';
 import { getPredictionTemperature, type IChartData } from '../../modules/Corn/functions/getPredictionTemperature';
 import { getTodayDate } from '../../modules/Corn/functions/getTodayDate';
 import LineChart from '../../modules/Corn/LineChart/LineChart';
 import Map from '../../modules/Corn/Map/Map';
+import Panel from '../../modules/Corn/Panel/Panel';
 import type { ICornFormSchema } from '../../modules/Corn/types/Corn.types';
 import ss from './CornSilageHarvestCalculator.module.scss';
-import Panel from '../../modules/Corn/Panel/Panel';
-import Form from '../../modules/Corn/Form/Form';
 
 const CornSilageHarvestCalculator = () => {
   const [isError, setIsError] = useState<boolean>(false);

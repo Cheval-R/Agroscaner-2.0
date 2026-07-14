@@ -1,6 +1,7 @@
+import pLimit from 'p-limit';
+
 import type { ICornFormSchema } from '../types/Corn.types';
 import { getSumEffectiveTemperature } from './getSumEffectiveTemperature';
-import pLimit from 'p-limit';
 
 const START_DATE_TO_GET_HISTORICAL_DATE = 2010;
 
@@ -24,7 +25,7 @@ interface IWeather {
   };
 }
 
-// ? TODO: Добавить кэширование данных. Если на пример пользователь ввел 10 мая потом 16 мая, то не нужно запрашивать еще раз данные, проще взять с кэша и пересчитать
+// ? TODO: Добавить кэширование данных. Если например пользователь ввел 10 мая потом 16 мая, то не нужно запрашивать еще раз данные, проще взять с кэша и пересчитать
 
 // ? TODO 2: Можно сделать график завязаный на выбранной дате, то есть, пользователь запрашивает первый раз и если он меняется то меняется начало графика, при этом запрос на сервер не делаем, но если выбрали более раннюю дату то ничего не поделать нужно делать новый запрос.
 
@@ -41,6 +42,7 @@ export interface IChartData {
 export async function getPredictionTemperature(data: ICornFormSchema, baseTemp: number): Promise<IChartData[]> {
   const { startMonth, startDay } = getStartDatePrediction(data.sowingDate);
 
+  // eslint-disable-next-line no-useless-catch
   try {
     const actualTemperature: TForecastTemperature = await fetchTemperatureFromSowingToToday(data);
 
@@ -62,7 +64,6 @@ export async function getPredictionTemperature(data: ICornFormSchema, baseTemp: 
     return resultData;
   } catch (error) {
     throw error;
-  } finally {
   }
 }
 
@@ -118,7 +119,7 @@ async function fetchHistoricalData(
 ): Promise<IHistoricalTemperatureData> {
   const endYear = new Date().getFullYear() - 1;
   const limit = pLimit(MAX_YEARS_PER_REQUEST);
-  let promises: Promise<IMeanTemperature>[] = [];
+  const promises: Promise<IMeanTemperature>[] = [];
 
   for (let year = START_DATE_TO_GET_HISTORICAL_DATE; year <= endYear; year++) {
     const startDate = `${year}-${startMonth}-${startDay}`;
@@ -265,10 +266,7 @@ function getStartDatePrediction(sowingDate: string): {
     // const sowingDateArray = sowingDate.split('.');
     // startMonth = sowingDateArray[1];
     // startDay = sowingDateArray[0];
-    // console.log(sowingDateArray);
   }
-  console.log(startMonth);
-  console.log(startDay);
 
   return { startMonth, startDay };
 }

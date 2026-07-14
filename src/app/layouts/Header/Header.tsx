@@ -119,11 +119,11 @@ const HeaderNav = ({
             Расчёт сроков уборки кукурузы
           </BubbleRouterLink>
         </li>
-        <li className={ss.navItem}>
-          <BubbleRouterLink to={'nitrogen-feeding-calculator'}>
-            Расчёт азотной подкормки
-          </BubbleRouterLink>
-        </li>
+        {/*<li className={ss.navItem}>*/}
+        {/*  <BubbleRouterLink to={'nitrogen-feeding-calculator'}>*/}
+        {/*    Расчёт азотной подкормки*/}
+        {/*  </BubbleRouterLink>*/}
+        {/*</li>*/}
       </ul>
     </nav>
   );

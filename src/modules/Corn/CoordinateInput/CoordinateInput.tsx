@@ -17,8 +17,6 @@ interface Props {
 }
 
 const CoordinateInput: React.FC<Props> = ({ register, coordinateType, formState, ss }) => {
-  console.log(formState.errors[coordinateType]?.message);
-
   return (
     <label className={ss.inputWrapper}>
       <span>{coordinateType === 'latitude' ? 'Широта' : 'Долгота'}</span>

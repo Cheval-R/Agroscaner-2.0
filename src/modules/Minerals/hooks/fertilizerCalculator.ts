@@ -140,13 +140,6 @@ export class Calculator {
                 ? 0.8
                 : 0.7;
 
-    console.log(
-      `Коэффициенты:
-		Азот: ${nitrogen}
-		Фосфор: ${phosphorus}
-		Калий: ${potassium}`,
-    );
-
     return {
       nitrogen: nitrogen,
       phosphorus: phosphorus,
@@ -199,7 +192,6 @@ export class Calculator {
         (result[key].physWeightPerGa / 1000) * this.field.area,
       );
     });
-    console.log('result1', result);
     return result;
   }
   calculatePrice(result: IResults): IResults {
@@ -227,11 +219,8 @@ export class Calculator {
   }
 
   calculate(): IResults {
-    console.log('input', this);
-
     let result: IResults = this.createEmptyResult();
     result = this.calculateDose(result);
-    console.log('result1', result);
     result = this.calculatePrice(result);
 
     return result;

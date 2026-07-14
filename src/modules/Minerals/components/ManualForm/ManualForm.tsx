@@ -9,22 +9,24 @@ import ss from './ManualForm.module.scss';
 
 const ManualForm = ({ calculate }: { calculate: (data: IManualFormSchema) => void }) => {
   const { register, handleSubmit, control, formState, setValue, reset } =
-    useForm<IManualFormSchema>({
-      defaultValues: {
-        nitrogen: {
-          soilValue: '123',
-          price: '20.655',
-          fertilizer: 'ammiachnaya-selitra',
-        },
-        potassium: { soilValue: '123', price: '23', fertilizer: 'kaliy-hloristyy' },
-        phosphorus: {
-          soilValue: '123',
-          price: '52',
-          fertilizer: 'ammofos-52',
-        },
-        field: { area: '123', harvest: '123', crop: 'pshenitsa-yarovaya' },
-      },
-    });
+    useForm<IManualFormSchema>(
+    //   {
+    //   defaultValues: {
+    //     nitrogen: {
+    //       soilValue: '',
+    //       price: '20.655',
+    //       fertilizer: 'ammiachnaya-selitra',
+    //     },
+    //     potassium: { soilValue: '', price: '', fertilizer: 'kaliy-hloristyy' },
+    //     phosphorus: {
+    //       soilValue: '',
+    //       price: '52',
+    //       fertilizer: 'ammofos-52',
+    //     },
+    //     field: { area: '', harvest: '', crop: 'pshenitsa-yarovaya' },
+    //   },
+    // }
+    );
   const customOnSubmit: SubmitHandler<IManualFormSchema> = (data) => {
     calculate(data);
   };

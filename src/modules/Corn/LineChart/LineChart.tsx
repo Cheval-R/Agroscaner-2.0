@@ -16,26 +16,54 @@ interface Props {
   chartData: IChartData[];
 }
 
-function getDiapasonSeasonForHarvesting(chartData: IChartData[]) {
-  const optimalSeasonStartIndex = chartData.findIndex((elem) => elem.sumEffectiveTemperature >= 850);
-  let optimalSeasonEndIndex = chartData.findIndex((elem) => elem.sumEffectiveTemperature >= 950);
-  if (optimalSeasonEndIndex === -1) optimalSeasonEndIndex = chartData.length - 1;
-  return { optimalSeasonStartIndex, optimalSeasonEndIndex };
+type OptimalSeason =
+  | { status: 'notReached' }
+  | { status: 'inProgress'; startIndex: number; endIndex: number }
+  | { status: 'found'; startIndex: number; endIndex: number };
+
+function getOptimalSeason(chartData: IChartData[]): OptimalSeason {
+  const startIndex = chartData.findIndex((elem) => elem.sumEffectiveTemperature >= 850);
+
+  if (startIndex === -1) {
+    return { status: 'notReached' };
+  }
+
+  const endIndex = chartData.findIndex((elem) => elem.sumEffectiveTemperature >= 950);
+
+  if (endIndex === -1) {
+    return {
+      status: 'inProgress',
+      startIndex,
+      endIndex: chartData.length - 1,
+    };
+  }
+
+  return {
+    status: 'found',
+    startIndex,
+    endIndex,
+  };
 }
 
-function createOptimalSeasonDataset(chartData: IChartData[]): ChartDataset<'line'> | undefined {
-  const { optimalSeasonStartIndex, optimalSeasonEndIndex } = getDiapasonSeasonForHarvesting(chartData);
-
-  if (optimalSeasonStartIndex === -1) return;
+function createOptimalSeasonDataset(
+  chartData: IChartData[],
+  optimalSeason: OptimalSeason,
+): ChartDataset<'line'> | null {
+  if (optimalSeason.status === 'notReached') {
+    return null;
+  }
 
   const polygonData = Array(chartData.length).fill(null);
 
-  for (let i = optimalSeasonStartIndex; i != optimalSeasonEndIndex; i++) {
+  for (let i = optimalSeason.startIndex; i <= optimalSeason.endIndex; i++) {
     polygonData[i] = chartData[i].sumEffectiveTemperature;
   }
 
-  const polygonDataset: ChartDataset<'line'> = {
-    label: 'Оптимальный период (850–950)',
+  return {
+    label:
+      optimalSeason.status === 'inProgress'
+        ? 'Оптимальный период начался, 950 еще не достигнуто'
+        : 'Оптимальный период (850–950)',
     data: polygonData,
     fill: 'origin',
     backgroundColor: 'rgba(75, 192, 192, 0.6)',
@@ -45,8 +73,6 @@ function createOptimalSeasonDataset(chartData: IChartData[]): ChartDataset<'line
     yAxisID: 'y1',
     borderWidth: 0,
   };
-
-  return polygonDataset;
 }
 
 function createDataset(chartData: IChartData[], containerWidth: number): ChartDataset<'line'>[] {
@@ -107,12 +133,19 @@ const LineChart: React.FC<Props> = ({ chartData }) => {
   }, []);
 
   const datasets: ChartDataset<'line'>[] = createDataset(chartData, containerWidth);
-
-  const optimalSeasonDataset = createOptimalSeasonDataset(chartData);
+  const optimalSeason = getOptimalSeason(chartData);
+  const optimalSeasonDataset = createOptimalSeasonDataset(chartData, optimalSeason);
 
   if (optimalSeasonDataset) {
     datasets.push(optimalSeasonDataset);
   }
+
+  const optimalSeasonMessage =
+    optimalSeason.status === 'notReached'
+      ? 'Оптимальный период не найден: сумма эффективных температур не достигла 850.'
+      : optimalSeason.status === 'inProgress'
+        ? 'Оптимальный период начался, но верхняя граница 950 еще не достигнута.'
+        : null;
 
   const labels: string[] = chartData.map((elem) => elem.date);
 
@@ -140,7 +173,7 @@ const LineChart: React.FC<Props> = ({ chartData }) => {
       tooltip: {
         filter: (tooltipItem: TooltipItem<'line'>) => {
           const datasetLabel = tooltipItem.dataset.label;
-          return datasetLabel !== 'Оптимальный период (850–950)';
+          return !datasetLabel?.startsWith('Оптимальный период');
         },
       },
     },
@@ -171,6 +204,7 @@ const LineChart: React.FC<Props> = ({ chartData }) => {
 
   return (
     <div className={ss.chart}>
+      {optimalSeasonMessage && <p className={ss.notice}>{optimalSeasonMessage}</p>}
       <div
         className={ss.canvas}
         ref={canvasRef}

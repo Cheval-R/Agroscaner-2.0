@@ -36,7 +36,6 @@ const ClientForm: React.FC<Props> = ({ calculate }) => {
     },
   });
   const customOnSubmit: SubmitHandler<IClientFormSchema> = (data) => {
-    console.log(data);
     calculate(data);
   };
 

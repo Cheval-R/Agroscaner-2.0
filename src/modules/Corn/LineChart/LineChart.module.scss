@@ -2,6 +2,16 @@
   min-height: clamp(320px, 40vw, 460px);
 }
 
+.notice {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-left: 4px solid rgb(252, 194, 59);
+  background: rgb(252 194 59 / 0.12);
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
 .canvas {
   position: relative;
   min-height: inherit;
