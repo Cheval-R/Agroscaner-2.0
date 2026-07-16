@@ -39,7 +39,7 @@ const HeaderTop = () => {
   return (
     <div className={ss.headerTop}>
       <BubbleLink
-        href="#!"
+        href="https://tatagrohimservis.ru/"
         className={ss.tahsLogo}
       >
         <img
@@ -55,7 +55,7 @@ const HeaderTop = () => {
         {/* Калькулятор расчёта доз удобрений */}
       </Bubble>
       <BubbleLink
-        href="#!"
+        href="https://tatagrohimservis.ru/uslugi/laboratorija/"
         className={ss.labLogo}
       >
         <img
